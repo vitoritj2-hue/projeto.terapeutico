@@ -1,0 +1,1636 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transformar</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0f1e;--bg2:#111827;--bg3:#1a2235;--bg4:#222d42;
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.12);
+  --text:#f0f4ff;--text2:#8b9abd;--text3:#5a6a8a;
+  --blue:#4f8ef7;--teal:#2dd4aa;
+  --grad:linear-gradient(135deg,#4f8ef7,#2dd4aa);
+  --green:#2dd4aa;--yellow:#f0b429;--red:#f56565;--obs:#718096;
+  --shadow:0 4px 24px rgba(0,0,0,.4);--r:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+button,input,select,textarea{font-family:'Inter',sans-serif}
+.screen{display:none;min-height:100vh;flex-direction:column}
+.screen.active{display:flex}
+
+/* HOME */
+#screen-home{background:var(--bg);align-items:center;justify-content:center;position:relative;overflow:hidden}
+.home-bg{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 800px 500px at 20% 50%,rgba(79,142,247,.08) 0%,transparent 70%),radial-gradient(ellipse 600px 400px at 80% 30%,rgba(45,212,170,.06) 0%,transparent 70%)}
+.home-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);background-size:60px 60px}
+.home-inner{z-index:1;text-align:center;padding:40px 24px;max-width:520px;width:100%;animation:fadeUp .7s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.home-logo-wrap{width:68px;height:68px;border-radius:18px;background:linear-gradient(135deg,#1e3a5f,#1a4a3a);border:1px solid rgba(79,142,247,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;box-shadow:0 0 40px rgba(79,142,247,.15)}
+.home-eyebrow{font-size:.68rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--teal);margin-bottom:12px}
+.home-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3rem);font-weight:700;line-height:1.15;margin-bottom:6px;background:linear-gradient(135deg,#fff 40%,#8ba8d0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.home-sub{font-size:.9rem;color:var(--text2);margin-bottom:44px;font-weight:300}
+.home-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px}
+.home-card{background:var(--bg3);border:1px solid var(--border2);border-radius:14px;padding:22px 18px;cursor:pointer;transition:all .3s;text-align:left}
+.home-card:hover{border-color:rgba(79,142,247,.4);transform:translateY(-3px);box-shadow:0 8px 32px rgba(0,0,0,.3)}
+.home-card-line{width:24px;height:2px;border-radius:2px;background:var(--grad);margin-bottom:12px}
+.home-card-label{font-size:.9rem;font-weight:600;color:var(--text);margin-bottom:3px}
+.home-card-sub{font-size:.75rem;color:var(--text2)}
+.home-access{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.btn-outline{background:transparent;border:1px solid var(--border2);color:var(--text2);padding:10px 20px;border-radius:8px;cursor:pointer;font-size:.84rem;font-weight:500;transition:all .25s}
+.btn-outline:hover{border-color:var(--blue);color:var(--text);background:rgba(79,142,247,.06)}
+
+/* TOPBAR */
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;height:56px;gap:12px;flex-shrink:0;position:sticky;top:0;z-index:100}
+.topbar-brand{font-weight:700;font-size:.9rem;color:var(--text);white-space:nowrap;display:flex;align-items:center;gap:8px;margin-right:8px}
+.topbar-brand-dot{width:22px;height:22px;border-radius:6px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:11px;color:white;font-weight:700;flex-shrink:0}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:8px;flex-shrink:0}
+.topbar-user{display:flex;align-items:center;gap:6px;font-size:.78rem;color:var(--text2)}
+.topbar-avatar{width:26px;height:26px;border-radius:7px;background:var(--grad);display:flex;align-items:center;justify-content:center;color:white;font-size:.65rem;font-weight:700;flex-shrink:0}
+.topbar-logout{background:none;border:1px solid var(--border2);color:var(--text3);padding:5px 12px;border-radius:7px;cursor:pointer;font-size:.76rem;transition:all .2s}
+.topbar-logout:hover{color:var(--red);border-color:rgba(245,101,101,.3)}
+.notif-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text2);width:32px;height:32px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;position:relative;flex-shrink:0;transition:all .2s}
+.notif-btn:hover{border-color:var(--border2);color:var(--text)}
+.notif-dot{position:absolute;top:-3px;right:-3px;background:var(--red);color:white;font-size:.52rem;font-weight:700;border-radius:50%;width:14px;height:14px;display:none;align-items:center;justify-content:center;border:2px solid var(--bg2)}
+
+/* ABAS */
+.tabs-bar{background:var(--bg2);border-bottom:1px solid var(--border);display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex-shrink:0}
+.tabs-bar::-webkit-scrollbar{display:none}
+.tab-btn{padding:0 18px;height:44px;display:flex;align-items:center;font-size:.8rem;font-weight:500;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;flex-shrink:0}
+.tab-btn:hover{color:var(--text2)}
+.tab-btn.active{color:var(--blue);border-bottom-color:var(--blue)}
+
+/* CONTEÚDO */
+.page-content{flex:1;overflow-y:auto}
+.page{display:none;padding:24px 20px;max-width:1100px;margin:0 auto;width:100%}
+.page.active{display:block}
+.page-header{margin-bottom:22px}
+.page-title{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text)}
+.page-subtitle{font-size:.78rem;color:var(--text2);margin-top:3px}
+
+/* TRIAGEM */
+#screen-triagem{background:var(--bg)}
+.triagem-header{background:var(--bg2);border-bottom:1px solid var(--border);padding:16px 20px;display:flex;align-items:center;gap:12px;flex-shrink:0}
+.triagem-header h2{font-size:1rem;font-weight:600}
+.tipo-pill{margin-left:auto;background:rgba(79,142,247,.1);border:1px solid rgba(79,142,247,.2);color:var(--blue);border-radius:50px;padding:3px 12px;font-size:.72rem;font-weight:600}
+.back-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text2);width:32px;height:32px;border-radius:7px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:all .2s;flex-shrink:0}
+.back-btn:hover{background:var(--bg4);color:var(--text)}
+.triagem-body{max-width:680px;margin:0 auto;padding:28px 20px;width:100%}
+.fst{font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-grid.one{grid-template-columns:1fr}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:.72rem;font-weight:500;color:var(--text2)}
+.fg input,.fg select,.fg textarea{background:var(--bg3);border:1px solid var(--border2);color:var(--text);border-radius:9px;padding:10px 12px;font-family:'Inter',sans-serif;font-size:.86rem;outline:none;transition:border-color .2s;width:100%}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--blue)}
+.fg select option{background:var(--bg3)}
+.fg textarea{resize:vertical;min-height:80px}
+.checkbox-group{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.checkbox-item{display:flex;align-items:center;gap:5px;font-size:.8rem;color:var(--text2);cursor:pointer}
+.checkbox-item input{accent-color:var(--teal)}
+.submit-btn{width:100%;margin-top:24px;background:var(--grad);color:white;border:none;padding:13px;border-radius:10px;font-family:'Inter',sans-serif;font-size:.92rem;font-weight:600;cursor:pointer;transition:all .3s}
+.submit-btn:hover{opacity:.9;transform:translateY(-1px)}
+
+/* MÉTRICAS */
+.metrics-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:20px}
+.metric-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:16px;transition:border-color .2s}
+.metric-card:hover{border-color:var(--border2)}
+.metric-label{font-size:.62rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:6px}
+.metric-value{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;color:var(--text)}
+.metric-accent{width:24px;height:2px;background:var(--grad);border-radius:2px;margin-top:6px}
+
+/* DATA CARD */
+.data-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:16px}
+.data-card-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.data-card-title{font-size:.86rem;font-weight:600;color:var(--text)}
+table{width:100%;border-collapse:collapse}
+th{background:var(--bg3);padding:9px 14px;text-align:left;font-size:.62rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border)}
+td{padding:12px 14px;font-size:.83rem;color:var(--text2);border-bottom:1px solid var(--border);vertical-align:middle}
+td strong{color:var(--text);font-weight:600}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.015)}
+.empty-row td{text-align:center;color:var(--text3);font-style:italic;padding:28px}
+
+/* BUSCA */
+.search-bar{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px 18px;margin-bottom:14px}
+.search-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.search-input-wrap{flex:1;min-width:180px;position:relative}
+.search-input-wrap input{background:var(--bg3);border:1px solid var(--border2);color:var(--text);border-radius:8px;padding:8px 12px 8px 34px;font-family:'Inter',sans-serif;font-size:.83rem;outline:none;transition:border-color .2s;width:100%}
+.search-input-wrap input::placeholder{color:var(--text3)}
+.search-input-wrap input:focus{border-color:var(--blue)}
+.search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--text3)}
+.search-filters{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.filter-label{font-size:.7rem;font-weight:600;color:var(--text3);white-space:nowrap}
+.filter-select{background:var(--bg3);border:1px solid var(--border2);color:var(--text2);border-radius:7px;padding:5px 9px;font-family:'Inter',sans-serif;font-size:.76rem;outline:none;cursor:pointer}
+.filter-select option{background:var(--bg3)}
+.filter-chip{padding:4px 11px;border-radius:50px;font-size:.72rem;font-weight:500;cursor:pointer;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);transition:all .2s;white-space:nowrap}
+.filter-chip:hover{border-color:var(--blue);color:var(--blue)}
+.filter-chip.active-all{background:rgba(79,142,247,.1);color:var(--blue);border-color:rgba(79,142,247,.3)}
+.filter-chip.active-andamento{background:rgba(240,180,41,.1);color:var(--yellow);border-color:rgba(240,180,41,.3)}
+.filter-chip.active-finalizado{background:rgba(45,212,170,.1);color:var(--teal);border-color:rgba(45,212,170,.3)}
+.filter-chip.active-imprevisto{background:rgba(245,101,101,.1);color:var(--red);border-color:rgba(245,101,101,.3)}
+.filter-chip.active-obs{background:rgba(113,128,150,.1);color:var(--obs);border-color:rgba(113,128,150,.3)}
+.search-info{font-size:.72rem;color:var(--text3);margin-top:8px;display:flex;justify-content:space-between}
+.clear-btn{background:none;border:none;color:var(--blue);font-size:.72rem;cursor:pointer;font-family:'Inter',sans-serif}
+.highlight{background:rgba(79,142,247,.2);border-radius:3px;padding:1px 2px;color:var(--text)}
+
+/* BADGES */
+.sb{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:50px;font-size:.7rem;font-weight:500}
+.sb-green{background:rgba(45,212,170,.1);color:var(--teal)}
+.sb-yellow{background:rgba(240,180,41,.1);color:var(--yellow)}
+.sb-red{background:rgba(245,101,101,.1);color:var(--red)}
+.sb-obs{background:rgba(113,128,150,.1);color:var(--obs)}
+.sd{width:5px;height:5px;border-radius:50%}
+.sd-g{background:var(--green)}.sd-y{background:var(--yellow)}.sd-r{background:var(--red)}.sd-o{background:var(--obs)}
+.lv{display:inline-flex;padding:2px 8px;border-radius:50px;font-size:.66rem;font-weight:700;color:white}
+.lv1{background:linear-gradient(135deg,#4f8ef7,#7bb3ff)}
+.lv2{background:linear-gradient(135deg,#1e3a5f,#4f8ef7)}
+.lv3{background:var(--grad)}
+
+/* TERAPEUTAS */
+.therapist-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.therapist-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:18px}
+.tc-header{display:flex;align-items:center;gap:11px;margin-bottom:12px}
+.t-avatar{width:40px;height:40px;border-radius:9px;background:var(--grad);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:.86rem;flex-shrink:0}
+.t-info h4{font-size:.88rem;font-weight:600;color:var(--text)}
+.t-info p{font-size:.72rem;color:var(--text2);margin-top:2px}
+.tc-credentials{background:var(--bg2);border-radius:8px;padding:10px;margin-bottom:10px;border:1px solid var(--border)}
+.cred-row{display:flex;align-items:center;gap:8px;font-size:.76rem;padding:3px 0}
+.cred-label{color:var(--text3);min-width:52px;font-weight:500}
+.cred-val{color:var(--text);font-weight:500;flex:1}
+.cred-edit{background:none;border:none;color:var(--blue);cursor:pointer;font-size:.7rem;font-family:'Inter',sans-serif}
+.tc-footer{display:flex;gap:8px;align-items:center}
+.tc-badge{font-size:.68rem;padding:2px 9px;border-radius:50px;background:rgba(45,212,170,.1);color:var(--teal);font-weight:500;border:1px solid rgba(45,212,170,.2)}
+.add-card{background:var(--bg3);border:2px dashed var(--border2);border-radius:var(--r);padding:32px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;transition:all .2s;color:var(--text3);min-height:120px;text-align:center}
+.add-card:hover{border-color:var(--blue);color:var(--blue);background:rgba(79,142,247,.03)}
+.add-card-icon{font-size:1.8rem;line-height:1}
+
+/* PATIENT CARDS */
+.patients-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
+.patient-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:all .25s}
+.patient-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:var(--shadow)}
+.pch{padding:14px 16px;display:flex;align-items:center;gap:11px;border-bottom:1px solid var(--border)}
+.p-avatar{width:38px;height:38px;border-radius:9px;background:var(--grad);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:.86rem;flex-shrink:0}
+.p-info h4{font-size:.88rem;font-weight:600;color:var(--text)}
+.p-info p{font-size:.7rem;color:var(--text2);margin-top:2px}
+.p-ind{margin-left:auto;width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.pcb{padding:12px 16px}
+.sess-row{display:flex;justify-content:space-between;margin-bottom:4px;font-size:.75rem}
+.sess-lbl{color:var(--text3)}.sess-cnt{font-weight:600;color:var(--text)}
+.pbar{height:3px;background:var(--bg4);border-radius:50px;overflow:hidden;margin-bottom:12px}
+.pfill{height:100%;border-radius:50px;background:var(--grad);transition:width .4s}
+.sess-controls{display:flex;align-items:center;gap:10px;margin-bottom:11px}
+.sess-btn{width:28px;height:28px;border-radius:7px;border:1px solid var(--border2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:700;transition:all .2s;background:var(--bg3);color:var(--text2)}
+.sess-btn:hover:not(:disabled){border-color:var(--blue);color:var(--blue)}
+.sess-btn:disabled{opacity:.25;cursor:not-allowed}
+.sess-dots{display:flex;gap:4px;flex:1;justify-content:center}
+.sess-dot{width:11px;height:11px;border-radius:50%;background:var(--bg4);border:1px solid var(--border2);transition:all .25s}
+.sess-dot.done{background:var(--grad);border-color:transparent}
+.sess-dot.current{background:var(--grad);border:2px solid var(--teal);box-shadow:0 0 8px rgba(45,212,170,.3)}
+.dev-lbl{font-size:.62rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:5px;display:flex;align-items:center;justify-content:space-between}
+.dev-link{background:none;border:none;color:var(--blue);font-size:.7rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+.dev-txt{font-size:.8rem;line-height:1.5;min-height:52px;background:var(--bg3);border-radius:8px;padding:8px 10px;border:1px solid var(--border);font-family:'Inter',sans-serif;width:100%;resize:none;outline:none;color:var(--text);transition:border-color .2s}
+.dev-txt:focus{border-color:var(--blue)}
+.dev-txt::placeholder{color:var(--text3)}
+.pcf{padding:9px 16px;border-top:1px solid var(--border);display:flex;gap:6px}
+.sbt{flex:1;padding:6px;border-radius:7px;border:1px solid var(--border);background:var(--bg3);cursor:pointer;font-size:.68rem;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;transition:all .2s;color:var(--text2)}
+.sbt:hover{border-color:var(--border2)}
+.sbt.ag{border-color:rgba(45,212,170,.3);color:var(--teal);background:rgba(45,212,170,.06)}
+.sbt.ay{border-color:rgba(240,180,41,.3);color:var(--yellow);background:rgba(240,180,41,.06)}
+.sbt.ar{border-color:rgba(245,101,101,.3);color:var(--red);background:rgba(245,101,101,.06)}
+.sbt.ao{border-color:rgba(113,128,150,.3);color:var(--obs);background:rgba(113,128,150,.06)}
+
+/* CALENDÁRIO */
+.cal-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:16px}
+.cal-nav-row{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border)}
+.cal-nav-title{font-weight:600;font-size:.95rem;color:var(--text)}
+.cal-arrow{background:var(--bg3);border:1px solid var(--border);color:var(--text2);width:28px;height:28px;border-radius:7px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.cal-arrow:hover{border-color:var(--border2);color:var(--text)}
+.cal-weekdays{display:grid;grid-template-columns:repeat(7,1fr);background:var(--bg3);border-bottom:1px solid var(--border)}
+.cal-wd{text-align:center;padding:7px 4px;font-size:.6rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr)}
+.cal-day{min-height:64px;padding:5px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;user-select:none}
+.cal-day:nth-child(7n){border-right:none}
+.cal-day:hover{background:rgba(79,142,247,.06)}
+.cal-day.other-month .day-num{color:var(--bg4)}
+.cal-day.other-month{cursor:default}
+.cal-day.today .day-num{background:var(--grad);color:white;border-radius:5px;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-weight:700}
+.cal-day.selected{background:rgba(79,142,247,.1);outline:2px solid rgba(79,142,247,.4);outline-offset:-1px}
+.day-num{font-size:.76rem;font-weight:600;color:var(--text2);margin-bottom:3px;width:22px;height:22px;display:flex;align-items:center;justify-content:center}
+.day-events{display:flex;flex-direction:column;gap:2px}
+.day-event-pill{font-size:.58rem;padding:2px 4px;border-radius:3px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pill-blue{background:rgba(79,142,247,.15);color:#7bb3ff}
+.pill-green{background:rgba(45,212,170,.15);color:var(--teal)}
+.pill-yellow{background:rgba(240,180,41,.15);color:var(--yellow)}
+.pill-red{background:rgba(245,101,101,.15);color:var(--red)}
+.more-badge{font-size:.56rem;color:var(--text3)}
+.agenda-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.agenda-item:last-child{border-bottom:none}
+.agenda-time{font-size:.74rem;font-weight:700;color:var(--blue);min-width:38px;margin-top:1px}
+.agenda-info h5{font-size:.82rem;font-weight:600;color:var(--text)}
+.agenda-info p{font-size:.7rem;color:var(--text2);margin-top:1px}
+.agenda-delete{margin-left:auto;background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;padding:2px 4px;border-radius:4px;flex-shrink:0;transition:color .2s}
+.agenda-delete:hover{color:var(--red)}
+.upcoming-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.upcoming-item:last-child{border-bottom:none}
+.upcoming-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.upcoming-info{flex:1}
+.upcoming-info h5{font-size:.8rem;font-weight:600;color:var(--text)}
+.upcoming-info p{font-size:.7rem;color:var(--text2)}
+.upcoming-date{font-size:.7rem;font-weight:600;color:var(--blue);white-space:nowrap}
+
+/* CONTRATO */
+.contract-wrap{max-width:700px}
+.patient-selector{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px 18px;margin-bottom:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.patient-selector label{font-size:.76rem;font-weight:500;color:var(--text2);white-space:nowrap}
+.patient-selector select{background:var(--bg3);border:1px solid var(--border2);color:var(--text);border-radius:8px;padding:7px 10px;font-family:'Inter',sans-serif;font-size:.83rem;outline:none;flex:1;min-width:180px}
+.patient-selector select option{background:var(--bg3)}
+.auto-banner{display:none;background:rgba(45,212,170,.06);border:1px solid rgba(45,212,170,.2);border-radius:8px;padding:9px 13px;margin-bottom:12px;font-size:.78rem;color:var(--teal);align-items:center;gap:8px}
+.auto-banner.visible{display:flex}
+.contract-doc{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:36px 44px;line-height:1.8}
+.contract-doc h1{font-family:'Playfair Display',serif;font-size:1.25rem;text-align:center;color:var(--text);margin-bottom:3px}
+.contract-doc .sub{text-align:center;color:var(--text2);font-size:.78rem;margin-bottom:3px}
+.contract-doc .sub2{text-align:center;font-size:.72rem;color:var(--teal);font-style:italic;margin-bottom:22px}
+.contract-doc h3{font-size:.82rem;font-weight:700;color:var(--text);margin:16px 0 4px}
+.contract-doc p{font-size:.82rem;color:var(--text2)}
+.cfields{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0;padding:14px;background:var(--bg3);border-radius:8px;border:1px solid var(--border)}
+.cf label{font-size:.64rem;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--text3);display:block;margin-bottom:4px}
+.cf input{width:100%;background:var(--bg2);border:1px solid var(--border2);color:var(--text);border-radius:7px;padding:7px 10px;font-family:'Inter',sans-serif;font-size:.8rem;outline:none;transition:border-color .2s}
+.cf input:focus{border-color:var(--blue)}
+.cf input.auto-filled{border-color:rgba(45,212,170,.3);background:rgba(45,212,170,.04)}
+.contract-patient-info{background:rgba(79,142,247,.05);border:1px solid rgba(79,142,247,.15);border-radius:8px;padding:12px 14px;margin:12px 0}
+.cpi-title{font-size:.62rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.cpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.cpi-row{display:flex;flex-direction:column;gap:1px}
+.cpi-key{font-size:.64rem;color:var(--text3);font-weight:500}
+.cpi-val{font-size:.78rem;color:var(--text);font-weight:500}
+.sign-area{margin-top:26px;display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.sign-block{text-align:center}
+.sign-line{border-bottom:1px solid var(--border2);margin-bottom:6px;height:34px}
+.sign-label{font-size:.7rem;color:var(--text3)}
+
+/* RELATÓRIO */
+.relatorio-grid{display:grid;grid-template-columns:240px 1fr;gap:14px;align-items:start}
+.rel-sidebar{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.rel-sidebar-hdr{padding:11px 14px;border-bottom:1px solid var(--border)}
+.rel-sidebar-hdr h4{font-size:.82rem;font-weight:600;color:var(--text)}
+.rel-sidebar-hdr p{font-size:.7rem;color:var(--text2);margin-top:1px}
+.rel-patient-list{max-height:460px;overflow-y:auto}
+.rel-patient-item{display:flex;align-items:center;gap:9px;padding:10px 13px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}
+.rel-patient-item:last-child{border-bottom:none}
+.rel-patient-item:hover{background:var(--bg3)}
+.rel-patient-item.active{background:rgba(79,142,247,.08);border-left:2px solid var(--blue)}
+.rp-avatar{width:30px;height:30px;border-radius:7px;background:var(--grad);display:flex;align-items:center;justify-content:center;color:white;font-size:.68rem;font-weight:700;flex-shrink:0}
+.rp-info h5{font-size:.8rem;font-weight:600;color:var(--text)}
+.rp-info p{font-size:.68rem;color:var(--text2);margin-top:1px}
+.rp-sessoes{margin-left:auto;font-size:.7rem;font-weight:700;color:var(--blue);white-space:nowrap}
+.rel-content{display:flex;flex-direction:column;gap:12px}
+.rel-empty{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:44px 20px;text-align:center;color:var(--text3)}
+.rel-empty .es-icon{font-size:32px;margin-bottom:10px;opacity:.5}
+.rel-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:12px}
+.rel-card-header{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.rel-card-header h4{font-size:.84rem;font-weight:600;color:var(--text)}
+.rel-card-body{padding:14px 16px}
+.rel-hero{display:grid;grid-template-columns:repeat(auto-fit,minmax(80px,1fr));gap:8px;margin-bottom:4px}
+.rel-stat{text-align:center;padding:10px 6px;background:var(--bg3);border-radius:8px;border:1px solid var(--border)}
+.rel-stat-val{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text)}
+.rel-stat-lbl{font-size:.6rem;color:var(--text3);font-weight:600;margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
+.rel-progress-bar{height:5px;background:var(--bg4);border-radius:50px;overflow:hidden;margin:12px 0 5px}
+.rel-progress-fill{height:100%;border-radius:50px;background:var(--grad);transition:width .5s ease}
+.rel-progress-label{display:flex;justify-content:space-between;font-size:.68rem;color:var(--text3)}
+.rel-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.rel-info-row{display:flex;flex-direction:column;gap:2px;padding:9px 10px;background:var(--bg3);border-radius:7px;border:1px solid var(--border)}
+.rel-info-key{font-size:.62rem;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.rel-info-val{font-size:.78rem;color:var(--text);font-weight:500}
+.rel-timeline{display:flex;flex-direction:column}
+.rel-tl-item{display:flex;gap:11px;position:relative}
+.rel-tl-item::before{content:'';position:absolute;left:13px;top:26px;bottom:-4px;width:1px;background:var(--border)}
+.rel-tl-item:last-child::before{display:none}
+.rel-tl-dot{width:26px;height:26px;border-radius:6px;background:var(--grad);display:flex;align-items:center;justify-content:center;color:white;font-size:.68rem;font-weight:700;flex-shrink:0;z-index:1}
+.rel-tl-dot.empty{background:var(--bg4);color:var(--text3);border:1px solid var(--border)}
+.rel-tl-body{flex:1;padding:0 0 16px}
+.rel-tl-header{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.rel-tl-title{font-size:.8rem;font-weight:600;color:var(--text)}
+.rel-tl-date{font-size:.68rem;color:var(--text2)}
+.rel-tl-text{font-size:.78rem;color:var(--text2);background:var(--bg3);border-radius:7px;padding:9px 11px;line-height:1.5;border-left:2px solid var(--blue)}
+.print-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:6px 12px;border-radius:7px;font-family:'Inter',sans-serif;font-size:.74rem;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .2s}
+.print-btn:hover{border-color:var(--blue);color:var(--blue)}
+
+/* DEVOLUTIVAS */
+.dev-history-item{border:1px solid var(--border);border-radius:9px;overflow:hidden;margin-bottom:7px}
+.dev-history-header{display:flex;align-items:center;gap:9px;padding:9px 12px;background:var(--bg3);cursor:pointer;user-select:none;transition:background .15s}
+.dev-history-header:hover{background:var(--bg4)}
+.dev-sessao-num{width:24px;height:24px;border-radius:6px;background:var(--grad);color:white;font-size:.66rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.dev-sessao-num.empty{background:var(--bg4);color:var(--text3);border:1px solid var(--border)}
+.dev-sessao-info{flex:1}
+.dev-sessao-info h5{font-size:.8rem;font-weight:600;color:var(--text)}
+.dev-sessao-info p{font-size:.68rem;color:var(--text2);margin-top:1px}
+.dev-sessao-arrow{font-size:.68rem;color:var(--text3);transition:transform .2s}
+.dev-sessao-arrow.open{transform:rotate(90deg)}
+.dev-history-body{padding:0 12px;max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s}
+.dev-history-body.open{max-height:260px;padding:10px 12px}
+.dev-textarea{width:100%;background:var(--bg3);border:1px solid var(--border2);color:var(--text);border-radius:8px;padding:9px 11px;font-family:'Inter',sans-serif;font-size:.8rem;resize:vertical;min-height:76px;outline:none;transition:border-color .2s;line-height:1.5}
+.dev-textarea::placeholder{color:var(--text3)}
+.dev-textarea:focus{border-color:var(--blue)}
+.dev-textarea:disabled{opacity:.35;cursor:not-allowed}
+.dev-save-row{display:flex;align-items:center;justify-content:space-between;margin-top:7px}
+.dev-save-btn{background:var(--grad);color:white;border:none;padding:5px 13px;border-radius:6px;font-family:'Inter',sans-serif;font-size:.74rem;font-weight:600;cursor:pointer}
+.dev-char-count{font-size:.66rem;color:var(--text3)}
+
+/* NOTIFICAÇÕES */
+.notif-panel{position:fixed;top:64px;right:12px;width:300px;max-height:440px;background:var(--bg2);border:1px solid var(--border2);border-radius:14px;box-shadow:var(--shadow);z-index:300;overflow:hidden;display:none;flex-direction:column}
+.notif-panel.open{display:flex}
+.notif-panel-header{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.notif-panel-header h4{font-size:.84rem;font-weight:600;color:var(--text)}
+.notif-panel-header button{background:var(--bg3);border:1px solid var(--border);color:var(--text2);width:22px;height:22px;border-radius:5px;cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center}
+.notif-list{overflow-y:auto;max-height:360px}
+.notif-item{display:flex;gap:9px;padding:10px 13px;border-bottom:1px solid var(--border);transition:background .15s}
+.notif-item:last-child{border-bottom:none}
+.notif-item:hover{background:var(--bg3)}
+.notif-icon{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.ni-red{background:rgba(245,101,101,.1)}.ni-yellow{background:rgba(240,180,41,.1)}
+.ni-green{background:rgba(45,212,170,.1)}.ni-blue{background:rgba(79,142,247,.1)}
+.notif-content h5{font-size:.76rem;font-weight:600;color:var(--text);margin-bottom:2px}
+.notif-content p{font-size:.68rem;color:var(--text2);line-height:1.4}
+.notif-empty{text-align:center;padding:24px 12px;color:var(--text3);font-size:.78rem}
+
+/* MISC */
+.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.btn-primary{background:var(--grad);color:white;border:none;padding:9px 18px;border-radius:8px;font-family:'Inter',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .25s}
+.btn-primary:hover{opacity:.9;transform:translateY(-1px)}
+.btn-secondary{background:var(--bg3);color:var(--text2);border:1px solid var(--border2);padding:9px 18px;border-radius:8px;font-family:'Inter',sans-serif;font-size:.82rem;cursor:pointer;transition:all .2s}
+.btn-secondary:hover{background:var(--bg4);color:var(--text)}
+.link-btn{background:none;border:none;color:var(--blue);cursor:pointer;font-size:.76rem;font-weight:600;font-family:'Inter',sans-serif}
+.link-btn:hover{opacity:.75}
+.btn-danger{background:none;border:1px solid rgba(245,101,101,.3);color:var(--red);padding:6px 13px;border-radius:7px;font-family:'Inter',sans-serif;font-size:.76rem;cursor:pointer;transition:all .2s}
+.btn-danger:hover{background:rgba(245,101,101,.08)}
+.save-indicator{position:fixed;bottom:18px;right:16px;background:var(--bg3);border:1px solid var(--border2);color:var(--text2);font-size:.7rem;padding:5px 12px;border-radius:50px;z-index:200;opacity:0;transition:opacity .3s;pointer-events:none}
+.save-indicator.show{opacity:1}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:10px 18px;border-radius:9px;font-size:.8rem;box-shadow:var(--shadow);display:none;z-index:400;white-space:nowrap}
+.toast.show{display:block;animation:toastIn .3s ease}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+.empty-state{text-align:center;padding:40px 20px;color:var(--text3)}
+.empty-state .es-icon{font-size:32px;margin-bottom:10px;opacity:.4}
+.empty-state p{font-size:.82rem}
+.reset-banner{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;font-size:.78rem;color:var(--text2)}
+
+@keyframes mIn{from{opacity:0;transform:scale(.95) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;align-items:flex-end;justify-content:center;padding:0;backdrop-filter:blur(4px)}
+.modal-overlay.open{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:18px 18px 0 0;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow);animation:mIn .25s ease}
+.modal.sm{max-width:420px}
+.modal-header{padding:16px 20px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.modal-header h3{font-size:.96rem;font-weight:600;color:var(--text)}
+.modal-close{background:var(--bg3);border:1px solid var(--border);color:var(--text2);width:26px;height:26px;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .2s}
+.modal-close:hover{border-color:var(--red);color:var(--red)}
+.modal-body{padding:18px 20px}
+.detail-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:.8rem}
+.detail-row:last-child{border-bottom:none}
+.dk{color:var(--text3);font-weight:500}.dv{color:var(--text);font-weight:600;text-align:right;max-width:58%}
+
+@media(max-width:700px){
+  .relatorio-grid{grid-template-columns:1fr}
+  .patients-grid{grid-template-columns:1fr}
+  .therapist-grid{grid-template-columns:1fr}
+  .home-cards{grid-template-columns:1fr}
+  .form-grid{grid-template-columns:1fr}
+  .metrics-row{grid-template-columns:1fr 1fr}
+  .cfields{grid-template-columns:1fr}
+  .sign-area{grid-template-columns:1fr;gap:16px}
+  .cpi-grid{grid-template-columns:1fr}
+  .contract-doc{padding:22px 16px}
+  .page{padding:16px 14px}
+  .tab-btn{padding:0 12px;font-size:.74rem}
+  .rel-info-grid{grid-template-columns:1fr}
+  .data-card-header{flex-direction:column;align-items:flex-start}
+}
+@media print{
+  .topbar,.tabs-bar,.notif-panel,.save-indicator,.toast,.modal-overlay{display:none!important}
+  .relatorio-grid{grid-template-columns:1fr!important}
+}
+</style>
+</head>
+<body>
+
+<div class="save-indicator" id="save-indicator">Salvo</div>
+
+<!-- HOME -->
+<div id="screen-home" class="screen active">
+  <div class="home-bg"></div>
+  <div class="home-grid"></div>
+  <div class="home-inner">
+    <div class="home-logo-wrap">
+      <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+        <defs>
+          <linearGradient id="hgA" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#4f8ef7"/><stop offset="100%" stop-color="#7bb3ff"/></linearGradient>
+          <linearGradient id="hgB" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#2dd4aa"/><stop offset="100%" stop-color="#6ee7cc"/></linearGradient>
+        </defs>
+        <circle cx="12" cy="6" r="4.5" fill="url(#hgA)"/>
+        <path d="M2 28 Q2 18 12 18 Q16 18 18 22 Q16 12 12 12 Q2 12 2 28Z" fill="url(#hgA)"/>
+        <circle cx="24" cy="6" r="4.5" fill="url(#hgB)"/>
+        <path d="M34 28 Q34 18 24 18 Q20 18 18 22 Q20 12 24 12 Q34 12 34 28Z" fill="url(#hgB)"/>
+        <path d="M18 34 Q6 26 6 18 Q6 14 12 14 Q16 14 18 18 Q20 14 24 14 Q30 14 30 18 Q30 26 18 34Z" fill="url(#hgB)" opacity=".8"/>
+      </svg>
+    </div>
+    <p class="home-eyebrow">Projeto Social</p>
+    <h1 class="home-title">Transformar</h1>
+    <p class="home-sub">Abordagem Cristã · Plataforma de Atendimento Terapêutico</p>
+    <div class="home-cards">
+      <div class="home-card" onclick="goToTriagem('adulto')">
+        <div class="home-card-line"></div>
+        <div class="home-card-label">Atendimento Adulto</div>
+        <div class="home-card-sub">18 anos ou mais</div>
+      </div>
+      <div class="home-card" onclick="goToTriagem('infantil')">
+        <div class="home-card-line"></div>
+        <div class="home-card-label">Atendimento Infantil</div>
+        <div class="home-card-sub">Até 17 anos</div>
+      </div>
+    </div>
+    <div class="home-access">
+      <button class="btn-outline" onclick="goToTriagem('adulto')">Adulto</button>
+      <button class="btn-outline" onclick="goToTriagem('infantil')">Infantil</button>
+    </div>
+  </div>
+
+  <!-- três pontinhos discretos -->
+  <div style="position:absolute;bottom:24px;right:24px;z-index:10">
+    <button id="dots-btn" onclick="toggleDotsMenu()" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.35);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .25s;letter-spacing:1px" title="Acesso restrito">···</button>
+    <div id="dots-menu" style="display:none;position:absolute;bottom:44px;right:0;background:var(--bg2);border:1px solid var(--border2);border-radius:12px;overflow:hidden;min-width:200px;box-shadow:0 8px 32px rgba(0,0,0,.4);animation:mIn .2s ease">
+      <div style="padding:10px 14px 6px;font-size:.62rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3)">Acesso Restrito</div>
+      <button onclick="closeDotsMenu();promptAdminPwd()" style="width:100%;padding:11px 16px;background:none;border:none;color:var(--text2);font-family:'Inter',sans-serif;font-size:.84rem;text-align:left;cursor:pointer;transition:background .15s;display:flex;align-items:center;gap:10px" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background='none'">
+        <span style="width:6px;height:6px;border-radius:50%;background:var(--blue);flex-shrink:0"></span>Administrador
+      </button>
+      <button onclick="closeDotsMenu();openTherapistLogin()" style="width:100%;padding:11px 16px;background:none;border:none;color:var(--text2);font-family:'Inter',sans-serif;font-size:.84rem;text-align:left;cursor:pointer;transition:background .15s;display:flex;align-items:center;gap:10px;border-top:1px solid var(--border)" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background='none'">
+        <span style="width:6px;height:6px;border-radius:50%;background:var(--teal);flex-shrink:0"></span>Terapeuta
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- APRESENTAÇÃO -->
+<div id="screen-apresentacao" class="screen">
+  <div class="home-bg"></div>
+  <div class="home-grid"></div>
+  <div style="z-index:1;width:100%;max-width:680px;margin:0 auto;padding:48px 28px;animation:fadeUp .7s ease">
+
+    <!-- cabeçalho -->
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:36px">
+      <button class="back-btn" onclick="goHome()" style="flex-shrink:0">←</button>
+      <div>
+        <div style="font-size:.62rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--teal);margin-bottom:4px">Projeto Social</div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--text)">Transformar</div>
+      </div>
+      <div style="margin-left:auto">
+        <span id="apres-tipo-pill" class="tipo-pill">Adulto</span>
+      </div>
+    </div>
+
+    <!-- bloco principal -->
+    <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:16px;padding:32px;margin-bottom:20px">
+      <div style="width:32px;height:3px;background:var(--grad);border-radius:2px;margin-bottom:22px"></div>
+      <h2 style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--text);margin-bottom:16px;line-height:1.3">Bem-vindo(a) ao<br>Projeto Terapêutico Transformar</h2>
+      <p style="font-size:.9rem;color:var(--text2);line-height:1.8;margin-bottom:16px">
+        O <strong style="color:var(--text)">Projeto Terapêutico Transformar</strong> nasce com o propósito de tornar o cuidado emocional acessível a todos, oferecendo atendimentos com valor social de <strong style="color:var(--text)">R$ 35</strong>. Atuando na modalidade online e com uma <strong style="color:var(--text)">abordagem cristã</strong>, o projeto busca acolher, restaurar e direcionar vidas. Nosso objetivo é promover a cura de feridas emocionais, fortalecer a identidade e trazer clareza sobre destinos e propósitos, utilizando a terapia como ferramenta de transformação integral — emocional, espiritual e pessoal.
+      </p>
+      <p style="font-size:.9rem;color:var(--text2);line-height:1.8;margin-bottom:16px">
+        Nosso atendimento é realizado por terapeutas qualificados e comprometidos com o cuidado integral do ser humano — respeitando a história, a fé e as necessidades de cada pessoa.
+      </p>
+      <p style="font-size:.9rem;color:var(--text2);line-height:1.8">
+        O formulário a seguir é nossa <strong style="color:var(--text)">ficha de triagem</strong>. Ele nos ajuda a conhecer melhor você e direcionar o atendimento mais adequado. Todas as informações são tratadas com <strong style="color:var(--text)">total sigilo e respeito</strong>.
+      </p>
+    </div>
+
+    <!-- destaques -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:28px">
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center">
+        <div style="width:28px;height:3px;background:var(--grad);border-radius:2px;margin:0 auto 10px"></div>
+        <div style="font-size:.72rem;font-weight:600;color:var(--text);margin-bottom:4px">Acolhimento</div>
+        <div style="font-size:.68rem;color:var(--text3);line-height:1.4">Escuta sem julgamentos</div>
+      </div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center">
+        <div style="width:28px;height:3px;background:var(--grad);border-radius:2px;margin:0 auto 10px"></div>
+        <div style="font-size:.72rem;font-weight:600;color:var(--text);margin-bottom:4px">Sigilo Total</div>
+        <div style="font-size:.68rem;color:var(--text3);line-height:1.4">Ética e confidencialidade</div>
+      </div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center">
+        <div style="width:28px;height:3px;background:var(--grad);border-radius:2px;margin:0 auto 10px"></div>
+        <div style="font-size:.72rem;font-weight:600;color:var(--text);margin-bottom:4px">Fé e Cuidado</div>
+        <div style="font-size:.68rem;color:var(--text3);line-height:1.4">Abordagem Cristã</div>
+      </div>
+    </div>
+
+    <!-- aviso -->
+    <div style="background:rgba(79,142,247,.06);border:1px solid rgba(79,142,247,.2);border-radius:10px;padding:14px 18px;margin-bottom:28px;font-size:.8rem;color:var(--text2);line-height:1.6">
+      <strong style="color:var(--blue)">Antes de continuar:</strong> o preenchimento da ficha de triagem é o primeiro passo para iniciar o seu atendimento. Leva apenas alguns minutos e nos ajuda a preparar o melhor acolhimento para você.
+    </div>
+
+    <!-- botão avançar -->
+    <button class="submit-btn" onclick="avancarTriagem()" style="font-size:1rem;padding:15px;letter-spacing:.3px">
+      Preencher Ficha de Triagem →
+    </button>
+
+  </div>
+</div>
+<div id="screen-triagem" class="screen">
+  <div class="triagem-header">
+    <button class="back-btn" onclick="goHome()">←</button>
+    <h2>Formulário de Triagem</h2>
+    <span class="tipo-pill" id="tipo-badge">Adulto</span>
+  </div>
+  <div class="triagem-body">
+    <div id="form-adulto">
+      <div class="fst">Dados Pessoais</div>
+      <div class="form-grid">
+        <div class="fg"><label>Nome completo *</label><input id="a-nome" type="text" placeholder="Nome do paciente"></div>
+        <div class="fg"><label>Data de nascimento</label><input id="a-nasc" type="date"></div>
+        <div class="fg"><label>CPF</label><input id="a-cpf" type="text" placeholder="000.000.000-00"></div>
+        <div class="fg"><label>Telefone *</label><input id="a-tel" type="text" placeholder="(00) 00000-0000"></div>
+        <div class="fg"><label>E-mail</label><input id="a-email" type="email" placeholder="email@exemplo.com"></div>
+        <div class="fg"><label>Estado civil</label><select id="a-ecivil"><option>Solteiro(a)</option><option>Casado(a)</option><option>Divorciado(a)</option><option>Viúvo(a)</option><option>União estável</option></select></div>
+      </div>
+      <div class="fst">Motivo do Atendimento</div>
+      <div class="form-grid one"><div class="fg"><label>Queixa principal *</label><textarea id="a-queixa" placeholder="Descreva o motivo..."></textarea></div></div>
+      <div class="form-grid">
+        <div class="fg"><label>Terapia anterior?</label><select id="a-terapia"><option>Não</option><option>Sim, breve período</option><option>Sim, longo período</option></select></div>
+        <div class="fg"><label>Medicação psiquiátrica?</label><select id="a-med"><option>Não</option><option>Sim, em acompanhamento</option><option>Sim, sem acompanhamento</option></select></div>
+      </div>
+      <div class="fst">Sintomas</div>
+      <div class="form-grid one"><div class="fg"><div class="checkbox-group" id="a-sintomas">
+        <label class="checkbox-item"><input type="checkbox" value="Ansiedade"> Ansiedade</label>
+        <label class="checkbox-item"><input type="checkbox" value="Depressão"> Depressão</label>
+        <label class="checkbox-item"><input type="checkbox" value="Insônia"> Insônia</label>
+        <label class="checkbox-item"><input type="checkbox" value="Estresse"> Estresse</label>
+        <label class="checkbox-item"><input type="checkbox" value="Luto"> Luto</label>
+        <label class="checkbox-item"><input type="checkbox" value="Relacionamentos"> Relacionamentos</label>
+        <label class="checkbox-item"><input type="checkbox" value="Autoestima"> Autoestima</label>
+        <label class="checkbox-item"><input type="checkbox" value="Fobias"> Fobias</label>
+        <label class="checkbox-item"><input type="checkbox" value="Trauma"> Trauma</label>
+        <label class="checkbox-item"><input type="checkbox" value="Outros"> Outros</label>
+      </div></div></div>
+      <div class="fst">Preferências de Atendimento</div>
+      <div class="form-grid">
+        <div class="fg"><label>Dias preferidos</label><select id="a-dias"><option>Segunda a Sexta</option><option>Seg, Qua e Sex</option><option>Ter e Qui</option><option>Finais de semana</option></select></div>
+        <div class="fg"><label>Período</label><select id="a-periodo"><option>Manhã</option><option>Tarde</option><option>Noite</option><option>Qualquer</option></select></div>
+        <div class="fg"><label>Preferência de terapeuta</label><select id="a-preferencia-terapeuta"><option value="">Sem preferência</option><option value="Feminino">Terapeuta mulher</option><option value="Masculino">Terapeuta homem</option></select></div>
+      </div>
+    </div>
+    <div id="form-infantil" style="display:none">
+      <div class="fst">Dados da Criança</div>
+      <div class="form-grid">
+        <div class="fg"><label>Nome completo *</label><input id="i-nome" type="text"></div>
+        <div class="fg"><label>Data de nascimento</label><input id="i-nasc" type="date"></div>
+        <div class="fg"><label>Escola / Série</label><input id="i-escola" type="text" placeholder="Escola X — 3º ano"></div>
+        <div class="fg"><label>Reside com</label><select id="i-reside"><option>Pai e mãe</option><option>Somente mãe</option><option>Somente pai</option><option>Avós</option><option>Outro</option></select></div>
+      </div>
+      <div class="fst">Dados do Responsável</div>
+      <div class="form-grid">
+        <div class="fg"><label>Nome do responsável *</label><input id="i-resp" type="text"></div>
+        <div class="fg"><label>Parentesco</label><select id="i-parent"><option>Mãe</option><option>Pai</option><option>Avó/Avô</option><option>Tutor legal</option></select></div>
+        <div class="fg"><label>Telefone *</label><input id="i-tel" type="text" placeholder="(00) 00000-0000"></div>
+        <div class="fg"><label>E-mail</label><input id="i-email" type="email"></div>
+      </div>
+      <div class="fst">Motivo</div>
+      <div class="form-grid one">
+        <div class="fg"><label>Queixa principal *</label><textarea id="i-queixa"></textarea></div>
+        <div class="fg"><label>Histórico relevante</label><textarea id="i-hist" placeholder="Desenvolvimento, escola, família..."></textarea></div>
+      </div>
+      <div class="fst">Sintomas Observados</div>
+      <div class="form-grid one"><div class="fg"><div class="checkbox-group" id="i-sintomas">
+        <label class="checkbox-item"><input type="checkbox" value="Agressividade"> Agressividade</label>
+        <label class="checkbox-item"><input type="checkbox" value="Dificuldade escolar"> Dific. escolar</label>
+        <label class="checkbox-item"><input type="checkbox" value="Ansiedade"> Ansiedade</label>
+        <label class="checkbox-item"><input type="checkbox" value="Isolamento social"> Isolamento</label>
+        <label class="checkbox-item"><input type="checkbox" value="Birras intensas"> Birras</label>
+        <label class="checkbox-item"><input type="checkbox" value="Falta de atenção"> Falta atenção</label>
+        <label class="checkbox-item"><input type="checkbox" value="Medos excessivos"> Medos</label>
+        <label class="checkbox-item"><input type="checkbox" value="Outros"> Outros</label>
+      </div></div></div>
+      <div class="fst">Preferências de Atendimento</div>
+      <div class="form-grid">
+        <div class="fg"><label>Preferência de terapeuta</label><select id="i-preferencia-terapeuta"><option value="">Sem preferência</option><option value="Feminino">Terapeuta mulher</option><option value="Masculino">Terapeuta homem</option></select></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="screen-admin" class="screen">
+  <div class="topbar">
+    <div class="topbar-brand"><div class="topbar-brand-dot">T</div>Transformar</div>
+    <div class="topbar-right">
+      <button class="notif-btn" onclick="toggleNotifPanel('admin')">&#9679;<span class="notif-dot" id="notif-dot-admin"></span></button>
+      <div class="topbar-user"><div class="topbar-avatar">AD</div><span>Admin</span></div>
+      <button class="topbar-logout" onclick="goHome()">Sair</button>
+    </div>
+  </div>
+  <div class="tabs-bar" id="admin-tabs">
+    <button class="tab-btn active" onclick="switchTab('admin','dashboard',this)">Dashboard</button>
+    <button class="tab-btn" onclick="switchTab('admin','fichas',this)">Fichas</button>
+    <button class="tab-btn" onclick="switchTab('admin','terapeutas',this);renderTherapistAdmin()">Terapeutas</button>
+    <button class="tab-btn" onclick="switchTab('admin','agenda',this);initCal('admin')">Agenda</button>
+    <button class="tab-btn" onclick="switchTab('admin','relatorio',this);renderRelatorioList('admin')">Relatórios</button>
+    <button class="tab-btn" onclick="switchTab('admin','contrato',this);populateContractSelect('admin')">Contrato</button>
+  </div>
+  <div class="page-content">
+
+    <div class="page active" id="page-admin-dashboard">
+      <div class="page-header"><div class="page-title">Dashboard</div></div>
+      <div class="reset-banner"><span>Dados salvos localmente</span><button class="btn-danger" onclick="confirmReset()">Limpar tudo</button></div>
+      <div class="metrics-row">
+        <div class="metric-card"><div class="metric-label">Pacientes</div><div class="metric-value" id="m-total">0</div><div class="metric-accent"></div></div>
+        <div class="metric-card"><div class="metric-label">Andamento</div><div class="metric-value" id="m-andamento">0</div><div class="metric-accent"></div></div>
+        <div class="metric-card"><div class="metric-label">Finalizados</div><div class="metric-value" id="m-final">0</div><div class="metric-accent"></div></div>
+        <div class="metric-card"><div class="metric-label">Terapeutas</div><div class="metric-value" id="m-terapeutas">0</div><div class="metric-accent"></div></div>
+        <div class="metric-card"><div class="metric-label">Agendamentos</div><div class="metric-value" id="m-agend">0</div><div class="metric-accent"></div></div>
+      </div>
+      <div class="search-bar">
+        <div class="search-row">
+          <div class="search-input-wrap"><span class="search-icon">⌕</span><input type="text" id="search-q" placeholder="Buscar por nome, queixa, sintoma..." oninput="applyFilters()"></div>
+          <button class="btn-primary" onclick="openAssign()">Atribuir Paciente</button>
+        </div>
+        <div class="search-filters">
+          <span class="filter-label">Status:</span>
+          <span class="filter-chip active-all" id="chip-all" onclick="setStatusFilter('all')">Todos</span>
+          <span class="filter-chip" id="chip-andamento" onclick="setStatusFilter('andamento')">Andamento</span>
+          <span class="filter-chip" id="chip-finalizado" onclick="setStatusFilter('finalizado')">Finalizado</span>
+          <span class="filter-chip" id="chip-imprevisto" onclick="setStatusFilter('imprevisto')">Imprevisto</span>
+          <span class="filter-chip" id="chip-obs" onclick="setStatusFilter('obs')">Observação</span>
+        </div>
+        <div class="search-filters" style="margin-top:6px">
+          <span class="filter-label">Tipo:</span>
+          <select class="filter-select" id="filter-tipo" onchange="applyFilters()"><option value="">Todos</option><option value="Adulto">Adulto</option><option value="Infantil">Infantil</option></select>
+          <span class="filter-label" style="margin-left:6px">Terapeuta:</span>
+          <select class="filter-select" id="filter-terapeuta" onchange="applyFilters()"><option value="">Todos</option><option value="none">Sem terapeuta</option></select>
+          <span class="filter-label" style="margin-left:6px">Sessões:</span>
+          <select class="filter-select" id="filter-sessoes" onchange="applyFilters()"><option value="">Qualquer</option><option value="0">0</option><option value="1-3">1–3</option><option value="4-5">4–5</option><option value="6">Concluído</option></select>
+        </div>
+        <div class="search-info"><span id="search-results-count">Mostrando todos</span><button class="clear-btn" onclick="clearFilters()">Limpar filtros</button></div>
+      </div>
+      <div class="data-card">
+        <div class="data-card-header">
+          <span class="data-card-title" id="table-count-label">Pacientes</span>
+          <button class="btn-secondary" onclick="exportCSV()" style="font-size:.76rem;padding:6px 14px">Exportar CSV</button>
+        </div>
+        <div style="overflow-x:auto"><table><thead><tr><th>Paciente</th><th>Terapeuta</th><th>Sessões</th><th>Status</th><th>Ações</th></tr></thead><tbody id="admin-table-body"></tbody></table></div>
+      </div>
+    </div>
+
+    <div class="page" id="page-admin-fichas">
+      <div class="page-header"><div class="page-title">Fichas de Triagem</div></div>
+      <div class="data-card">
+        <div class="data-card-header"><span class="data-card-title">Fichas preenchidas</span><input class="filter-select" style="width:180px" placeholder="Buscar..." oninput="filterFichasTable(this.value)"></div>
+        <div style="overflow-x:auto"><table><thead><tr><th>Nome</th><th>Tipo</th><th>Data</th><th>Sintomas</th><th>Terapeuta</th><th>Ação</th></tr></thead><tbody id="fichas-table-body"></tbody></table></div>
+      </div>
+    </div>
+
+    <div class="page" id="page-admin-terapeutas">
+      <div class="page-header"><div class="page-title">Terapeutas</div></div>
+      <button class="btn-primary" style="width:100%;margin-bottom:14px;padding:13px" onclick="openNewTherapist()">+ Adicionar Novo Terapeuta</button>
+      <div class="therapist-grid" id="therapist-admin-grid"></div>
+    </div>
+
+    <div class="page" id="page-admin-agenda">
+      <div class="page-header"><div class="page-title">Agenda Geral</div></div>
+      <div class="cal-card">
+        <div class="cal-nav-row">
+          <button class="cal-arrow" id="btn-prev-admin">‹</button>
+          <span class="cal-nav-title" id="cal-admin-title"></span>
+          <button class="cal-arrow" id="btn-next-admin">›</button>
+        </div>
+        <div class="cal-weekdays" id="cal-wd-admin"></div>
+        <div class="cal-grid" id="cal-grid-admin"></div>
+      </div>
+      <div class="data-card">
+        <div class="data-card-header"><span class="data-card-title" id="admin-day-title">Selecione um dia</span></div>
+        <div id="admin-day-agenda" style="padding:14px 18px"><p style="color:var(--text3);font-size:.78rem">Clique em um dia para ver as sessões.</p></div>
+      </div>
+      <div class="data-card">
+        <div class="data-card-header"><span class="data-card-title">Próximas Sessões</span><span style="font-size:.74rem;color:var(--text3)">Próximos 7 dias</span></div>
+        <div id="admin-upcoming" style="padding:14px 18px"></div>
+      </div>
+    </div>
+
+    <div class="page" id="page-admin-relatorio">
+      <div class="page-header"><div class="page-title">Relatórios de Evolução</div></div>
+      <div class="relatorio-grid">
+        <div class="rel-sidebar"><div class="rel-sidebar-hdr"><h4>Pacientes</h4><p>Selecione para ver</p></div><div class="rel-patient-list" id="rel-list-admin"></div></div>
+        <div class="rel-content" id="rel-content-admin"><div class="rel-empty"><div class="es-icon">↗</div><p>Selecione um paciente.</p></div></div>
+      </div>
+    </div>
+
+    <div class="page" id="page-admin-contrato">
+      <div class="page-header"><div class="page-title">Gerar Contrato</div></div>
+      <div class="contract-wrap">
+        <div class="patient-selector"><label>Preencher automaticamente:</label><select id="admin-contract-select" onchange="fillContract('admin',this.value)"><option value="">— Selecione —</option></select></div>
+        <div class="auto-banner" id="admin-auto-banner">✓ <span id="admin-auto-text"></span></div>
+        <div class="contract-doc">
+          <h1>Contrato de Prestação de Serviços Terapêuticos</h1>
+          <p class="sub">Projeto Social Transformar</p><p class="sub2">Abordagem Cristã</p>
+          <div class="contract-patient-info" id="admin-cpi" style="display:none"><div class="cpi-title">Dados da Triagem</div><div class="cpi-grid" id="admin-cpi-grid"></div></div>
+          <div class="cfields">
+            <div class="cf"><label>Nome do Paciente</label><input type="text" id="ac-nome"></div>
+            <div class="cf"><label>Terapeuta</label><input type="text" id="ac-terapeuta"></div>
+            <div class="cf"><label>Data de Início</label><input type="date" id="ac-data"></div>
+            <div class="cf"><label>Valor por Sessão (R$)</label><input type="text" id="ac-valor" placeholder="0,00"></div>
+            <div class="cf"><label>Telefone</label><input type="text" id="ac-tel"></div>
+            <div class="cf"><label>E-mail</label><input type="text" id="ac-email"></div>
+          </div>
+          <h3>1. Objeto</h3><p>6 sessões individuais de 50 minutos.</p>
+          <h3>2. Cancelamento</h3><p>Comunicar com 24h de antecedência.</p>
+          <h3>3. Sigilo</h3><p>Sigilo absoluto conforme o Código de Ética Profissional.</p>
+          <div class="sign-area">
+            <div class="sign-block"><div class="sign-line"></div><div class="sign-label" id="ac-sign-paciente">Paciente / Responsável</div></div>
+            <div class="sign-block"><div class="sign-line"></div><div class="sign-label">Assinatura do(a) Terapeuta</div></div>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:14px;justify-content:flex-end">
+          <button class="btn-secondary" onclick="clearContract('admin')">Limpar</button>
+          <button class="btn-secondary" onclick="exportContractPDF('admin')" style="color:var(--teal);border-color:rgba(45,212,170,.3)">Exportar PDF</button>
+          <button class="btn-primary" onclick="showToast('Contrato registrado!')">Registrar</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- TERAPEUTA -->
+<div id="screen-therapist" class="screen">
+  <div class="topbar">
+    <div class="topbar-brand"><div class="topbar-brand-dot">T</div>Transformar</div>
+    <div class="topbar-right">
+      <button class="notif-btn" onclick="toggleNotifPanel('t')">&#9679;<span class="notif-dot" id="notif-dot-t"></span></button>
+      <div class="topbar-user"><div class="topbar-avatar" id="t-avatar-header">?</div><span id="t-name-header">Terapeuta</span></div>
+      <button class="topbar-logout" onclick="logoutTherapist()">Sair</button>
+    </div>
+  </div>
+  <div class="tabs-bar" id="therapist-tabs">
+    <button class="tab-btn" onclick="switchTab('t','perfil',this)">Meu Perfil</button>
+    <button class="tab-btn active" onclick="switchTab('t','pacientes',this)">Pacientes</button>
+    <button class="tab-btn" onclick="switchTab('t','agenda',this);initCal('t')">Agenda</button>
+    <button class="tab-btn" onclick="switchTab('t','relatorio',this);renderRelatorioList('t')">Relatórios</button>
+    <button class="tab-btn" onclick="switchTab('t','obs',this)">Observações</button>
+    <button class="tab-btn" onclick="switchTab('t','contrato',this);populateContractSelect('t')">Contrato</button>
+  </div>
+  <div class="page-content">
+
+    <!-- PERFIL -->
+    <div class="page" id="page-t-perfil">
+      <div class="page-header"><div class="page-title">Meu Perfil</div><div class="page-subtitle">Personalize como você aparece para a equipe</div></div>
+
+      <!-- foto + nome -->
+      <div class="data-card" style="margin-bottom:16px">
+        <div class="data-card-header"><span class="data-card-title">Foto de Perfil</span></div>
+        <div style="padding:24px;display:flex;align-items:center;gap:24px;flex-wrap:wrap">
+          <div style="position:relative;flex-shrink:0">
+            <div id="perfil-foto-wrap" style="width:96px;height:96px;border-radius:16px;background:var(--grad);display:flex;align-items:center;justify-content:center;color:white;font-size:2rem;font-weight:700;overflow:hidden;border:2px solid var(--border2)">
+              <span id="perfil-initials-display">?</span>
+              <img id="perfil-foto-img" src="" style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;inset:0">
+            </div>
+            <button onclick="document.getElementById('foto-input').click()" style="position:absolute;bottom:-6px;right:-6px;background:var(--blue);border:none;color:white;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center" title="Alterar foto">✎</button>
+            <input type="file" id="foto-input" accept="image/*" style="display:none" onchange="handleFotoUpload(this)">
+          </div>
+          <div style="flex:1;min-width:200px">
+            <div style="font-size:1rem;font-weight:600;color:var(--text);margin-bottom:4px" id="perfil-nome-display">—</div>
+            <div style="font-size:.78rem;color:var(--text2);margin-bottom:12px" id="perfil-crp-display">—</div>
+            <button onclick="document.getElementById('foto-input').click()" class="btn-secondary" style="font-size:.78rem;padding:6px 14px">Alterar foto de perfil</button>
+            <button onclick="removerFoto()" class="btn-secondary" style="font-size:.78rem;padding:6px 14px;margin-left:8px;color:var(--red);border-color:rgba(245,101,101,.3)">Remover foto</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- especialidade -->
+      <div class="data-card" style="margin-bottom:16px">
+        <div class="data-card-header"><span class="data-card-title">Especialidade de Atendimento</span></div>
+        <div style="padding:20px">
+          <p style="font-size:.8rem;color:var(--text2);margin-bottom:14px">Selecione as áreas em que você tem foco de atendimento. Você pode marcar mais de uma.</p>
+          <div id="especialidades-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:16px"></div>
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:8px;padding-top:14px;border-top:1px solid var(--border)">
+            <input type="text" id="nova-especialidade" placeholder="Adicionar outra especialidade..." style="flex:1;min-width:180px;background:var(--bg3);border:1px solid var(--border2);color:var(--text);border-radius:8px;padding:8px 12px;font-family:'Inter',sans-serif;font-size:.83rem;outline:none" onkeydown="if(event.key==='Enter')adicionarEspecialidade()">
+            <button class="btn-primary" onclick="adicionarEspecialidade()" style="padding:8px 16px;font-size:.82rem">+ Adicionar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- biografia -->
+      <div class="data-card" style="margin-bottom:16px">
+        <div class="data-card-header"><span class="data-card-title">Biografia</span><span style="font-size:.74rem;color:var(--text3)" id="bio-count">0/400 caracteres</span></div>
+        <div style="padding:20px">
+          <p style="font-size:.8rem;color:var(--text2);margin-bottom:12px">Escreva uma breve apresentação sobre você, sua formação e abordagem terapêutica.</p>
+          <textarea id="perfil-bio" maxlength="400" placeholder="Ex: Sou psicóloga clínica com especialização em Terapia Cognitivo-Comportamental. Atuo há 8 anos com foco em saúde emocional feminina, ansiedade e relacionamentos. Acredito que o autoconhecimento é o primeiro passo para a transformação..." style="width:100%;background:var(--bg3);border:1px solid var(--border2);color:var(--text);border-radius:10px;padding:12px 14px;font-family:'Inter',sans-serif;font-size:.84rem;resize:vertical;min-height:120px;outline:none;line-height:1.6;transition:border-color .2s" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border2)'" oninput="updateBioCount()"></textarea>
+        </div>
+      </div>
+
+      <!-- info adicional -->
+      <div class="data-card" style="margin-bottom:16px">
+        <div class="data-card-header"><span class="data-card-title">Informações Adicionais</span></div>
+        <div style="padding:20px">
+          <div class="form-grid">
+            <div class="fg"><label>Anos de experiência</label><input type="number" id="perfil-experiencia" min="0" max="50" placeholder="Ex: 8"></div>
+            <div class="fg"><label>Modalidade de atendimento</label><select id="perfil-modalidade"><option value="">Selecione...</option><option>Presencial</option><option>Online</option><option>Presencial e Online</option></select></div>
+            <div class="fg"><label>Formação principal</label><input type="text" id="perfil-formacao" placeholder="Ex: Psicologia — USP"></div>
+            <div class="fg"><label>Pós-graduação / Especialização</label><input type="text" id="perfil-pos" placeholder="Ex: TCC — Instituto X"></div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-primary" style="width:100%;padding:14px;font-size:.95rem" onclick="salvarPerfil()">Salvar Perfil</button>
+    </div>
+
+    <div class="page active" id="page-t-pacientes">
+      <div class="page-header"><div class="page-title">Meus Pacientes</div></div>
+      <div id="therapist-cards-container" class="patients-grid"></div>
+    </div>
+
+    <div class="page" id="page-t-agenda">
+      <div class="page-header"><div class="page-title">Minha Agenda</div></div>
+      <div class="cal-card">
+        <div class="cal-nav-row">
+          <button class="cal-arrow" id="btn-prev-t">‹</button>
+          <span class="cal-nav-title" id="cal-t-title"></span>
+          <button class="cal-arrow" id="btn-next-t">›</button>
+        </div>
+        <div class="cal-weekdays" id="cal-wd-t"></div>
+        <div class="cal-grid" id="cal-grid-t"></div>
+      </div>
+      <div class="data-card">
+        <div class="data-card-header">
+          <span class="data-card-title" id="t-day-title">Selecione um dia</span>
+          <span id="new-appt-date-label" style="font-size:.76rem;color:var(--blue)"></span>
+        </div>
+        <div id="t-day-agenda" style="padding:14px 18px"><p style="color:var(--text3);font-size:.78rem">Clique em um dia para ver as sessões.</p></div>
+      </div>
+      <div class="data-card">
+        <div class="data-card-header"><span class="data-card-title">Novo Agendamento</span></div>
+        <div style="padding:14px 18px">
+          <div class="form-grid" style="margin-bottom:12px">
+            <div class="fg"><label>Paciente *</label><select id="appt-patient"><option value="">— Selecione —</option></select></div>
+            <div class="fg"><label>Horário *</label><input type="time" id="appt-time" value="09:00"></div>
+            <div class="fg"><label>Modalidade</label><select id="appt-mode"><option>Presencial</option><option>Online</option></select></div>
+            <div class="fg"><label>Observação</label><input type="text" id="appt-obs" placeholder="Nota opcional..."></div>
+          </div>
+          <button class="btn-primary" style="width:100%" onclick="addAppointment()">Agendar Sessão</button>
+        </div>
+      </div>
+      <div class="data-card">
+        <div class="data-card-header"><span class="data-card-title">Próximas Sessões</span><span style="font-size:.74rem;color:var(--text3)">Próximos 7 dias</span></div>
+        <div id="t-upcoming" style="padding:14px 18px"></div>
+      </div>
+    </div>
+
+    <div class="page" id="page-t-relatorio">
+      <div class="page-header"><div class="page-title">Relatórios de Evolução</div></div>
+      <div class="relatorio-grid">
+        <div class="rel-sidebar"><div class="rel-sidebar-hdr"><h4>Meus Pacientes</h4><p>Selecione para ver</p></div><div class="rel-patient-list" id="rel-list-t"></div></div>
+        <div class="rel-content" id="rel-content-t"><div class="rel-empty"><div class="es-icon">↗</div><p>Selecione um paciente.</p></div></div>
+      </div>
+    </div>
+
+    <div class="page" id="page-t-obs">
+      <div class="page-header"><div class="page-title">Observações</div></div>
+      <div class="data-card"><div class="data-card-header"><span class="data-card-title">Por paciente</span><button class="btn-primary" onclick="saveData();showToast('Observações salvas!')">Salvar</button></div><div id="obs-list" style="padding:14px 18px;display:flex;flex-direction:column;gap:14px"></div></div>
+    </div>
+
+    <div class="page" id="page-t-contrato">
+      <div class="page-header"><div class="page-title">Gerar Contrato</div></div>
+      <div class="contract-wrap">
+        <div class="patient-selector"><label>Preencher automaticamente:</label><select id="t-contract-select" onchange="fillContract('t',this.value)"><option value="">— Selecione —</option></select></div>
+        <div class="auto-banner" id="t-auto-banner">✓ <span id="t-auto-text"></span></div>
+        <div class="contract-doc">
+          <h1>Contrato de Prestação de Serviços Terapêuticos</h1>
+          <p class="sub">Projeto Social Transformar</p><p class="sub2">Abordagem Cristã</p>
+          <div class="contract-patient-info" id="t-cpi" style="display:none"><div class="cpi-title">Dados da Triagem</div><div class="cpi-grid" id="t-cpi-grid"></div></div>
+          <div class="cfields">
+            <div class="cf"><label>Nome do Paciente</label><input type="text" id="tc-nome"></div>
+            <div class="cf"><label>Terapeuta</label><input type="text" id="tc-terapeuta" readonly style="opacity:.6;cursor:not-allowed"></div>
+            <div class="cf"><label>Data de Início</label><input type="date" id="tc-data"></div>
+            <div class="cf"><label>Valor por Sessão (R$)</label><input type="text" id="tc-valor" placeholder="0,00"></div>
+            <div class="cf"><label>Telefone</label><input type="text" id="tc-tel"></div>
+            <div class="cf"><label>E-mail</label><input type="text" id="tc-email"></div>
+          </div>
+          <h3>1. Objeto</h3><p>6 sessões individuais de 50 minutos.</p>
+          <h3>2. Cancelamento</h3><p>Comunicar com 24h de antecedência.</p>
+          <h3>3. Sigilo</h3><p>Sigilo conforme o Código de Ética Profissional.</p>
+          <div class="sign-area">
+            <div class="sign-block"><div class="sign-line"></div><div class="sign-label" id="tc-sign-paciente">Paciente / Responsável</div></div>
+            <div class="sign-block"><div class="sign-line"></div><div class="sign-label" id="tc-sign-terapeuta">Assinatura do(a) Terapeuta</div></div>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:14px;justify-content:flex-end">
+          <button class="btn-secondary" onclick="clearContract('t')">Limpar</button>
+          <button class="btn-secondary" onclick="exportContractPDF('t')" style="color:var(--teal);border-color:rgba(45,212,170,.3)">Exportar PDF</button>
+          <button class="btn-primary" onclick="showToast('Contrato registrado!')">Registrar</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-senha"><div class="modal sm">
+  <div class="modal-header"><h3>Acesso Administrador</h3><button class="modal-close" onclick="closeOverlay('modal-senha')">✕</button></div>
+  <div class="modal-body">
+    <p style="font-size:.8rem;color:var(--text2);margin-bottom:14px">Digite a senha para continuar.</p>
+    <div class="fg" style="margin-bottom:10px"><label>Senha</label><input type="password" id="senha-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')confirmarSenha()"></div>
+    <p id="senha-erro" style="display:none;color:var(--red);font-size:.74rem;margin-bottom:10px">Senha incorreta.</p>
+    <button class="submit-btn" onclick="confirmarSenha()" style="margin-top:4px">Entrar</button>
+  </div>
+</div></div>
+
+<div class="modal-overlay" id="modal-t-login"><div class="modal sm">
+  <div class="modal-header"><h3>Login Terapeuta</h3><button class="modal-close" onclick="closeOverlay('modal-t-login')">✕</button></div>
+  <div class="modal-body">
+    <p style="font-size:.8rem;color:var(--text2);margin-bottom:14px">Digite seu usuário e senha.</p>
+    <div class="fg" style="margin-bottom:10px"><label>Usuário</label><input type="text" id="t-login-user" placeholder="ex: carla.mendonca" onkeydown="if(event.key==='Enter')confirmarLoginT()"></div>
+    <div class="fg" style="margin-bottom:10px"><label>Senha</label><input type="password" id="t-login-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')confirmarLoginT()"></div>
+    <p id="t-login-erro" style="display:none;color:var(--red);font-size:.74rem;margin-bottom:10px">Usuário ou senha incorretos.</p>
+    <button class="submit-btn" onclick="confirmarLoginT()" style="margin-top:4px">Entrar</button>
+  </div>
+</div></div>
+
+<div class="modal-overlay" id="modal-t-form" onclick="if(event.target===this)closeOverlay('modal-t-form')"><div class="modal">
+  <div class="modal-header"><h3 id="t-form-title">Novo Terapeuta</h3><button class="modal-close" onclick="closeOverlay('modal-t-form')">✕</button></div>
+  <div class="modal-body">
+    <input type="hidden" id="t-form-id">
+    <div class="form-grid" style="margin-bottom:12px">
+      <div class="fg"><label>Nome completo *</label><input type="text" id="tf-nome"></div>
+      <div class="fg"><label>CRP</label><input type="text" id="tf-crp" placeholder="06/00000"></div>
+      <div class="fg"><label>Especialidade</label><input type="text" id="tf-esp" placeholder="Ex: TCC, Infantil..."></div>
+      <div class="fg"><label>Nível</label><select id="tf-nivel"><option value="1">Nível 1</option><option value="2">Nível 2</option><option value="3" selected>Nível 3</option></select></div>
+      <div class="fg"><label>Usuário (login) *</label><input type="text" id="tf-user"></div>
+      <div class="fg"><label>Senha *</label><input type="password" id="tf-pass"></div>
+    </div>
+    <p id="tf-erro" style="display:none;color:var(--red);font-size:.74rem;margin-bottom:10px"></p>
+    <div style="display:flex;gap:10px">
+      <button class="btn-secondary" style="flex:1" onclick="closeOverlay('modal-t-form')">Cancelar</button>
+      <button class="btn-primary" style="flex:1" onclick="saveTherapist()">Salvar</button>
+    </div>
+  </div>
+</div></div>
+
+<div class="modal-overlay" id="modal-ficha" onclick="if(event.target===this)closeOverlay('modal-ficha')"><div class="modal">
+  <div class="modal-header"><h3 id="mf-name">Ficha</h3><button class="modal-close" onclick="closeOverlay('modal-ficha')">✕</button></div>
+  <div class="modal-body" id="mf-body"></div>
+</div></div>
+
+<div class="modal-overlay" id="modal-reset" onclick="if(event.target===this)closeOverlay('modal-reset')"><div class="modal sm">
+  <div class="modal-header"><h3>Limpar dados</h3><button class="modal-close" onclick="closeOverlay('modal-reset')">✕</button></div>
+  <div class="modal-body">
+    <p style="font-size:.82rem;color:var(--text2);margin-bottom:18px">Apagará <strong style="color:var(--text)">todos</strong> os dados. Não pode ser desfeito.</p>
+    <div style="display:flex;gap:10px"><button class="btn-secondary" style="flex:1" onclick="closeOverlay('modal-reset')">Cancelar</button><button class="btn-danger" style="flex:1" onclick="resetAll()">Confirmar</button></div>
+  </div>
+</div></div>
+
+<div class="modal-overlay" id="modal-assign" onclick="if(event.target===this)closeOverlay('modal-assign')"><div class="modal sm">
+  <div class="modal-header"><h3>Atribuir Paciente</h3><button class="modal-close" onclick="closeOverlay('modal-assign')">✕</button></div>
+  <div class="modal-body">
+    <p style="font-size:.8rem;color:var(--text2);margin-bottom:12px">Vincule um paciente a um terapeuta.</p>
+    <div class="fg" style="margin-bottom:10px"><label>Paciente</label><select id="assign-patient" style="width:100%;background:var(--bg3);border:1px solid var(--border2);color:var(--text);border-radius:8px;padding:9px 11px;font-family:Inter,sans-serif;font-size:.84rem;outline:none"></select></div>
+    <div class="fg" style="margin-bottom:14px"><label>Terapeuta</label><select id="assign-therapist" style="width:100%;background:var(--bg3);border:1px solid var(--border2);color:var(--text);border-radius:8px;padding:9px 11px;font-family:Inter,sans-serif;font-size:.84rem;outline:none"></select></div>
+    <button class="btn-primary" style="width:100%" onclick="assignPatient()">Atribuir</button>
+  </div>
+</div></div>
+
+<div class="modal-overlay" id="modal-dev-history" onclick="if(event.target===this)closeOverlay('modal-dev-history')"><div class="modal">
+  <div class="modal-header"><h3 id="dev-history-title">Devolutivas</h3><button class="modal-close" onclick="closeOverlay('modal-dev-history')">✕</button></div>
+  <div class="modal-body">
+    <p style="font-size:.76rem;color:var(--text2);margin-bottom:12px">Clique em uma sessão para expandir e editar.</p>
+    <div id="dev-history-list"></div>
+  </div>
+</div></div>
+
+<div class="notif-panel" id="notif-panel-admin">
+  <div class="notif-panel-header"><h4>Notificações</h4><button onclick="closeNotifPanel('admin')">✕</button></div>
+  <div class="notif-list" id="notif-list-admin"></div>
+</div>
+<div class="notif-panel" id="notif-panel-t">
+  <div class="notif-panel-header"><h4>Notificações</h4><button onclick="closeNotifPanel('t')">✕</button></div>
+  <div class="notif-list" id="notif-list-t"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══ PERSISTÊNCIA ══
+const STORAGE_KEY = 'ptt_v5';
+async function saveData() {
+  try { if (window.storage) await window.storage.set(STORAGE_KEY, JSON.stringify({patients,appointments,therapists})); } catch(e) {}
+  const el = document.getElementById('save-indicator');
+  el.classList.add('show'); setTimeout(() => el.classList.remove('show'), 1800);
+}
+async function loadData() {
+  try {
+    if (window.storage) {
+      const r = await window.storage.get(STORAGE_KEY);
+      if (r && r.value) { const d = JSON.parse(r.value); patients = d.patients||[]; appointments = d.appointments||[]; therapists = d.therapists||[]; }
+    }
+  } catch(e) {}
+}
+setInterval(() => { if (patients.length||appointments.length||therapists.length) saveData(); }, 30000);
+
+// ══ ESTADO ══
+let patients=[], appointments=[], therapists=[], currentTherapist=null, currentTipo='adulto', activeStatusFilter='all';
+let calState = { admin:{year:0,month:0,selected:null}, t:{year:0,month:0,selected:null} };
+const today = new Date();
+calState.admin.year = calState.t.year = today.getFullYear();
+calState.admin.month = calState.t.month = today.getMonth();
+
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
+function pad(n) { return String(n).padStart(2,'0'); }
+function dateKey(y,m,d) { return y+'-'+pad(m+1)+'-'+pad(d); }
+function fmtDate(s) { if(!s) return '—'; const [y,m,d]=s.split('-'); return d+'/'+m+'/'+y; }
+function initials(n) { return n.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase(); }
+const MONTHS = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const WDS = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+
+// ══ NAVEGAÇÃO ══
+function goHome() { document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById('screen-home').classList.add('active'); }
+function goToTriagem(tipo) {
+  currentTipo = tipo;
+  // mostra tela de apresentação primeiro
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-apresentacao').classList.add('active');
+  document.getElementById('apres-tipo-pill').textContent = tipo==='adulto' ? 'Adulto' : 'Infantil';
+}
+
+function avancarTriagem() {
+  document.getElementById('form-adulto').style.display = currentTipo==='adulto' ? 'block' : 'none';
+  document.getElementById('form-infantil').style.display = currentTipo==='infantil' ? 'block' : 'none';
+  document.getElementById('tipo-badge').textContent = currentTipo==='adulto' ? 'Adulto' : 'Infantil';
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-triagem').classList.add('active');
+}
+function goToScreen(id) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (id==='screen-admin') refreshAdmin();
+  if (id==='screen-therapist') refreshTherapist();
+}
+function switchTab(scope, page, btn) {
+  const screenId = scope==='admin' ? 'screen-admin' : 'screen-therapist';
+  const prefix = scope==='admin' ? 'admin' : 't';
+  const tabsId = scope==='admin' ? 'admin-tabs' : 'therapist-tabs';
+  document.querySelectorAll('#'+screenId+' .page').forEach(p=>p.classList.remove('active'));
+  const pg = document.getElementById('page-'+prefix+'-'+page);
+  if (pg) pg.classList.add('active');
+  document.getElementById(tabsId).querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+}
+function closeOverlay(id) { document.getElementById(id).classList.remove('open'); }
+
+// ══ CALENDÁRIO ══
+const pColors = ['pill-blue','pill-green','pill-yellow','pill-red'];
+function pColor(pid) { return pColors[patients.findIndex(p=>p.id===pid) % pColors.length] || 'pill-blue'; }
+
+function buildCal(prefix) {
+  const {year, month, selected} = calState[prefix];
+  const gridEl = document.getElementById('cal-grid-'+prefix);
+  const titleEl = document.getElementById('cal-'+prefix+'-title');
+  const wdEl = document.getElementById('cal-wd-'+prefix);
+  if (!gridEl) return;
+
+  if (titleEl) titleEl.textContent = MONTHS[month] + ' ' + year;
+  if (wdEl) wdEl.innerHTML = WDS.map(d=>`<div class="cal-wd">${d}</div>`).join('');
+
+  const fd = new Date(year,month,1).getDay();
+  const dm = new Date(year,month+1,0).getDate();
+  const dp = new Date(year,month,0).getDate();
+  const ts = dateKey(today.getFullYear(), today.getMonth(), today.getDate());
+
+  const mine = prefix==='t' && currentTherapist
+    ? appointments.filter(a => { const p=patients.find(x=>x.id===a.patientId); return p && p.therapistId===currentTherapist.id; })
+    : appointments;
+  const abd = {};
+  mine.forEach(a => { if(!abd[a.date]) abd[a.date]=[]; abd[a.date].push(a); });
+
+  gridEl.innerHTML = '';
+
+  // dias anteriores
+  for (let i=0; i<fd; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'cal-day other-month';
+    cell.innerHTML = `<div class="day-num">${dp-fd+1+i}</div>`;
+    gridEl.appendChild(cell);
+  }
+
+  // dias do mês
+  for (let d=1; d<=dm; d++) {
+    const ds = dateKey(year, month, d);
+    const cell = document.createElement('div');
+    const cls = ['cal-day', ds===ts?'today':'', ds===selected?'selected':''].filter(Boolean).join(' ');
+    cell.className = cls;
+
+    const apts = abd[ds] || [];
+    const pills = apts.slice(0,2).map(a => {
+      const p = patients.find(x=>x.id===a.patientId);
+      return `<div class="day-event-pill ${pColor(a.patientId)}">${a.time} ${p?p.nome.split(' ')[0]:'?'}</div>`;
+    }).join('');
+    const more = apts.length>2 ? `<div class="more-badge">+${apts.length-2}</div>` : '';
+
+    cell.innerHTML = `<div class="day-num">${d}</div><div class="day-events">${pills}${more}</div>`;
+    cell.addEventListener('click', () => selectDay(prefix, ds));
+    gridEl.appendChild(cell);
+  }
+
+  // dias seguintes
+  const rem = (7-(fd+dm)%7)%7;
+  for (let d=1; d<=rem; d++) {
+    const cell = document.createElement('div');
+    cell.className = 'cal-day other-month';
+    cell.innerHTML = `<div class="day-num">${d}</div>`;
+    gridEl.appendChild(cell);
+  }
+}
+
+function selectDay(prefix, ds) {
+  calState[prefix].selected = ds;
+  buildCal(prefix);
+  showDayAgenda(prefix, ds);
+  buildUpcoming(prefix);
+  if (prefix==='t') {
+    const el = document.getElementById('new-appt-date-label');
+    if (el) el.textContent = 'Data selecionada: ' + fmtDate(ds);
+  }
+}
+
+function showDayAgenda(prefix, ds) {
+  const titleEl = document.getElementById(prefix==='admin'?'admin-day-title':'t-day-title');
+  const agendaEl = document.getElementById(prefix==='admin'?'admin-day-agenda':'t-day-agenda');
+  if (!agendaEl) return;
+  if (titleEl) titleEl.textContent = 'Sessões em ' + fmtDate(ds);
+
+  const mine = prefix==='t' && currentTherapist
+    ? appointments.filter(a => { const p=patients.find(x=>x.id===a.patientId); return p && p.therapistId===currentTherapist.id; })
+    : appointments;
+  const apts = mine.filter(a=>a.date===ds).sort((a,b)=>a.time.localeCompare(b.time));
+
+  if (!apts.length) { agendaEl.innerHTML = '<p style="color:var(--text3);font-size:.78rem">Nenhuma sessão neste dia.</p>'; return; }
+  agendaEl.innerHTML = apts.map(a => {
+    const p = patients.find(x=>x.id===a.patientId);
+    return `<div class="agenda-item">
+      <div class="agenda-time">${a.time}</div>
+      <div class="agenda-info"><h5>${p?p.nome:'?'}</h5><p>${a.mode}${a.obs?' · '+a.obs:''}</p></div>
+      ${prefix==='t' ? `<button class="agenda-delete" onclick="deleteAppointment('${a.id}','${ds}')">×</button>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function buildUpcoming(prefix) {
+  const upEl = document.getElementById(prefix==='admin'?'admin-upcoming':'t-upcoming');
+  if (!upEl) return;
+  const now = new Date(); now.setHours(0,0,0,0);
+  const n7 = new Date(now); n7.setDate(n7.getDate()+7);
+  const mine = prefix==='t' && currentTherapist
+    ? appointments.filter(a => { const p=patients.find(x=>x.id===a.patientId); return p && p.therapistId===currentTherapist.id; })
+    : appointments;
+  const up = mine.filter(a => { const d=new Date(a.date+'T00:00:00'); return d>=now && d<=n7; })
+    .sort((a,b) => a.date.localeCompare(b.date)||a.time.localeCompare(b.time));
+  const ts = dateKey(today.getFullYear(), today.getMonth(), today.getDate());
+  if (!up.length) { upEl.innerHTML = '<p style="color:var(--text3);font-size:.76rem">Nenhuma sessão nos próximos 7 dias.</p>'; return; }
+  upEl.innerHTML = up.map(a => {
+    const p = patients.find(x=>x.id===a.patientId);
+    return `<div class="upcoming-item">
+      <div class="upcoming-dot" style="background:${a.date===ts?'var(--teal)':'var(--blue)'}"></div>
+      <div class="upcoming-info"><h5>${p?p.nome:'?'}</h5><p>${a.time} · ${a.mode}</p></div>
+      <div class="upcoming-date">${fmtDate(a.date)}</div>
+    </div>`;
+  }).join('');
+}
+
+function initCal(prefix) {
+  if (!calState[prefix].selected) {
+    calState[prefix].selected = dateKey(today.getFullYear(), today.getMonth(), today.getDate());
+  }
+  // botões de navegação
+  const prevBtn = document.getElementById('btn-prev-'+prefix);
+  const nextBtn = document.getElementById('btn-next-'+prefix);
+  if (prevBtn) { prevBtn.onclick = () => navCal(prefix,-1); }
+  if (nextBtn) { nextBtn.onclick = () => navCal(prefix,1); }
+  buildCal(prefix);
+  showDayAgenda(prefix, calState[prefix].selected);
+  buildUpcoming(prefix);
+  if (prefix==='t') {
+    populateApptSelect();
+    const el = document.getElementById('new-appt-date-label');
+    if (el) el.textContent = 'Data selecionada: ' + fmtDate(calState[prefix].selected);
+  }
+}
+
+function navCal(prefix, dir) {
+  let {year, month} = calState[prefix];
+  month += dir;
+  if (month>11){month=0;year++;} if (month<0){month=11;year--;}
+  calState[prefix].year = year; calState[prefix].month = month;
+  buildCal(prefix);
+}
+
+function addAppointment() {
+  const pid = document.getElementById('appt-patient').value;
+  const time = document.getElementById('appt-time').value;
+  const mode = document.getElementById('appt-mode').value;
+  const obs = document.getElementById('appt-obs').value.trim();
+  const ds = calState['t'].selected;
+  if (!pid) { showToast('Selecione um paciente!'); return; }
+  if (!ds) { showToast('Selecione um dia no calendário!'); return; }
+  if (!time) { showToast('Informe o horário!'); return; }
+  appointments.push({id:uid(), patientId:pid, date:ds, time, mode, obs});
+  const p = patients.find(x=>x.id===pid);
+  if (p && p.sessoes<6) p.sessoes++;
+  document.getElementById('appt-obs').value = '';
+  saveData(); updateMetrics();
+  buildCal('t'); showDayAgenda('t', ds); buildUpcoming('t');
+  showToast('Sessão agendada para '+fmtDate(ds)+' às '+time+'!');
+}
+
+function deleteAppointment(aid, ds) {
+  appointments = appointments.filter(a=>a.id!==aid);
+  saveData(); updateMetrics();
+  buildCal('t'); showDayAgenda('t', ds); buildUpcoming('t');
+  showToast('Agendamento removido.');
+}
+
+function populateApptSelect() {
+  const sel = document.getElementById('appt-patient'); if (!sel) return;
+  sel.innerHTML = '<option value="">— Selecione —</option>';
+  (currentTherapist ? patients.filter(p=>p.therapistId===currentTherapist.id) : patients)
+    .forEach(p => { const o=document.createElement('option'); o.value=p.id; o.textContent=p.nome; sel.appendChild(o); });
+}
+
+// ══ SENHA ══
+function promptAdminPwd() { document.getElementById('modal-senha').classList.add('open'); document.getElementById('senha-input').value=''; document.getElementById('senha-erro').style.display='none'; setTimeout(()=>document.getElementById('senha-input').focus(),100); }
+function confirmarSenha() { if(document.getElementById('senha-input').value==='PTT2026'){closeOverlay('modal-senha');goToScreen('screen-admin');}else{document.getElementById('senha-erro').style.display='block';document.getElementById('senha-input').value='';} }
+
+// ══ LOGIN T ══
+function openTherapistLogin() { document.getElementById('modal-t-login').classList.add('open'); document.getElementById('t-login-user').value=''; document.getElementById('t-login-pass').value=''; document.getElementById('t-login-erro').style.display='none'; setTimeout(()=>document.getElementById('t-login-user').focus(),100); }
+function confirmarLoginT() {
+  const user=document.getElementById('t-login-user').value.trim().toLowerCase();
+  const pass=document.getElementById('t-login-pass').value;
+  const t=therapists.find(x=>x.username.toLowerCase()===user&&x.password===pass);
+  if(t){currentTherapist=t;closeOverlay('modal-t-login');updateTherapistHeader();goToScreen('screen-therapist');}
+  else{document.getElementById('t-login-erro').style.display='block';document.getElementById('t-login-pass').value='';}
+}
+function logoutTherapist() { currentTherapist=null; goHome(); }
+function updateTherapistHeader() {
+  if(!currentTherapist) return;
+  document.getElementById('t-avatar-header').textContent = initials(currentTherapist.nome);
+  document.getElementById('t-name-header').textContent = currentTherapist.nome.split(' ').slice(0,2).join(' ');
+  document.getElementById('tc-terapeuta').value = currentTherapist.nome;
+  document.getElementById('tc-sign-terapeuta').textContent = currentTherapist.nome+(currentTherapist.crp?' — CRP '+currentTherapist.crp:'');
+}
+
+// ══ PERFIL DO TERAPEUTA ══
+const ESPECIALIDADES_PADRAO = [
+  'Saúde da Mulher','Atendimento Infantil','Terapia de Casal',
+  'Família','Adolescentes','Ansiedade e Depressão',
+  'Luto e Perdas','Trauma','Dependência Química','Terceira Idade'
+];
+
+function initPerfil() {
+  if (!currentTherapist) return;
+  const t = therapists.find(x => x.id === currentTherapist.id);
+  if (!t) return;
+
+  // nome e CRP
+  document.getElementById('perfil-nome-display').textContent = t.nome;
+  document.getElementById('perfil-crp-display').textContent = t.crp ? 'CRP ' + t.crp : (t.esp || 'Terapeuta');
+  document.getElementById('perfil-initials-display').textContent = initials(t.nome);
+
+  // foto
+  const img = document.getElementById('perfil-foto-img');
+  const span = document.getElementById('perfil-initials-display');
+  if (t.foto) { img.src = t.foto; img.style.display = 'block'; span.style.display = 'none'; }
+  else { img.style.display = 'none'; span.style.display = 'block'; }
+
+  // bio
+  const bioEl = document.getElementById('perfil-bio');
+  bioEl.value = t.bio || '';
+  updateBioCount();
+
+  // info adicional
+  document.getElementById('perfil-experiencia').value = t.experiencia || '';
+  document.getElementById('perfil-modalidade').value = t.modalidade || '';
+  document.getElementById('perfil-formacao').value = t.formacao || '';
+  document.getElementById('perfil-pos').value = t.pos || '';
+
+  // especialidades
+  renderEspecialidades(t);
+}
+
+function renderEspecialidades(t) {
+  const grid = document.getElementById('especialidades-grid');
+  const selecionadas = t.especialidades || [];
+  const customEsps = (t.customEspecialidades || []);
+  const todas = [...ESPECIALIDADES_PADRAO, ...customEsps];
+
+  grid.innerHTML = todas.map((esp, i) => {
+    const isCustom = i >= ESPECIALIDADES_PADRAO.length;
+    const selected = selecionadas.includes(esp);
+    return `<div class="esp-chip${selected?' selected':''}${isCustom?' custom':''}" onclick="toggleEsp('${esp}')">
+      ${esp}
+      ${isCustom ? `<button class="remove-esp" onclick="event.stopPropagation();removeCustomEsp('${esp}')" title="Remover">×</button>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function toggleEsp(esp) {
+  const t = therapists.find(x => x.id === currentTherapist.id); if (!t) return;
+  if (!t.especialidades) t.especialidades = [];
+  const idx = t.especialidades.indexOf(esp);
+  if (idx >= 0) t.especialidades.splice(idx, 1);
+  else t.especialidades.push(esp);
+  renderEspecialidades(t);
+}
+
+function adicionarEspecialidade() {
+  const input = document.getElementById('nova-especialidade');
+  const val = input.value.trim();
+  if (!val) return;
+  const t = therapists.find(x => x.id === currentTherapist.id); if (!t) return;
+  if (!t.customEspecialidades) t.customEspecialidades = [];
+  if (!t.especialidades) t.especialidades = [];
+  if (!t.customEspecialidades.includes(val)) {
+    t.customEspecialidades.push(val);
+    t.especialidades.push(val);
+  }
+  input.value = '';
+  renderEspecialidades(t);
+}
+
+function removeCustomEsp(esp) {
+  const t = therapists.find(x => x.id === currentTherapist.id); if (!t) return;
+  t.customEspecialidades = (t.customEspecialidades || []).filter(x => x !== esp);
+  t.especialidades = (t.especialidades || []).filter(x => x !== esp);
+  renderEspecialidades(t);
+}
+
+function handleFotoUpload(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const t = therapists.find(x => x.id === currentTherapist.id); if (!t) return;
+    t.foto = e.target.result;
+    const img = document.getElementById('perfil-foto-img');
+    const span = document.getElementById('perfil-initials-display');
+    img.src = t.foto; img.style.display = 'block'; span.style.display = 'none';
+    // atualiza header
+    updateTherapistAvatarHeader(t);
+    showToast('Foto atualizada!');
+  };
+  reader.readAsDataURL(file);
+}
+
+function removerFoto() {
+  const t = therapists.find(x => x.id === currentTherapist.id); if (!t) return;
+  t.foto = null;
+  const img = document.getElementById('perfil-foto-img');
+  const span = document.getElementById('perfil-initials-display');
+  img.style.display = 'none'; span.style.display = 'block';
+  updateTherapistAvatarHeader(t);
+  showToast('Foto removida.');
+}
+
+function updateTherapistAvatarHeader(t) {
+  const av = document.getElementById('t-avatar-header');
+  if (!av) return;
+  if (t.foto) {
+    av.innerHTML = `<img src="${t.foto}" style="width:100%;height:100%;object-fit:cover;border-radius:7px">`;
+  } else {
+    av.textContent = initials(t.nome);
+  }
+}
+
+function updateBioCount() {
+  const bio = document.getElementById('perfil-bio');
+  const cnt = document.getElementById('bio-count');
+  if (bio && cnt) cnt.textContent = bio.value.length + '/400 caracteres';
+}
+
+function salvarPerfil() {
+  const t = therapists.find(x => x.id === currentTherapist.id); if (!t) return;
+  t.bio = document.getElementById('perfil-bio').value.trim();
+  t.experiencia = document.getElementById('perfil-experiencia').value;
+  t.modalidade = document.getElementById('perfil-modalidade').value;
+  t.formacao = document.getElementById('perfil-formacao').value.trim();
+  t.pos = document.getElementById('perfil-pos').value.trim();
+  currentTherapist = t;
+  saveData();
+  showToast('Perfil salvo com sucesso!');
+}
+
+// ══ TERAPEUTAS ══
+function renderTherapistAdmin() {
+  const grid = document.getElementById('therapist-admin-grid'); if(!grid) return;
+  grid.innerHTML = therapists.map(t => `
+    <div class="therapist-card">
+      <div class="tc-header">
+        <div class="t-avatar">${initials(t.nome)}</div>
+        <div class="t-info"><h4>${t.nome}</h4><p>${t.esp||'Psicólogo(a)'}${t.crp?' · CRP '+t.crp:''}</p></div>
+        <div style="margin-left:auto"><span class="lv lv${t.nivel}">Nível ${t.nivel}</span></div>
+      </div>
+      <div class="tc-credentials">
+        <div class="cred-row"><span class="cred-label">Usuário</span><span class="cred-val">${t.username}</span></div>
+        <div class="cred-row"><span class="cred-label">Senha</span><span class="cred-val">••••••••</span><button class="cred-edit" onclick="editTherapist('${t.id}')">Editar</button></div>
+        <div class="cred-row"><span class="cred-label">Pacientes</span><span class="cred-val">${patients.filter(p=>p.therapistId===t.id).length} atribuído(s)</span></div>
+      </div>
+      <div class="tc-footer"><span class="tc-badge">Ativo</span><button class="link-btn" style="margin-left:auto;color:var(--red)" onclick="removeTherapist('${t.id}')">Remover</button></div>
+    </div>`).join('');
+}
+function openNewTherapist() { document.getElementById('t-form-title').textContent='Novo Terapeuta'; document.getElementById('t-form-id').value=''; ['tf-nome','tf-crp','tf-esp','tf-user','tf-pass'].forEach(id=>document.getElementById(id).value=''); document.getElementById('tf-nivel').value='3'; document.getElementById('tf-erro').style.display='none'; document.getElementById('modal-t-form').classList.add('open'); setTimeout(()=>document.getElementById('tf-nome').focus(),100); }
+function editTherapist(id) { const t=therapists.find(x=>x.id===id); if(!t) return; document.getElementById('t-form-title').textContent='Editar Terapeuta'; document.getElementById('t-form-id').value=t.id; document.getElementById('tf-nome').value=t.nome; document.getElementById('tf-crp').value=t.crp||''; document.getElementById('tf-esp').value=t.esp||''; document.getElementById('tf-nivel').value=t.nivel; document.getElementById('tf-user').value=t.username; document.getElementById('tf-pass').value=t.password; document.getElementById('tf-erro').style.display='none'; document.getElementById('modal-t-form').classList.add('open'); }
+function saveTherapist() {
+  const nome=document.getElementById('tf-nome').value.trim(), user=document.getElementById('tf-user').value.trim().toLowerCase(), pass=document.getElementById('tf-pass').value, errEl=document.getElementById('tf-erro');
+  if(!nome||!user||!pass){errEl.textContent='Preencha nome, usuário e senha.';errEl.style.display='block';return;}
+  const existId=document.getElementById('t-form-id').value;
+  if(therapists.find(x=>x.username.toLowerCase()===user&&x.id!==existId)){errEl.textContent='Esse usuário já existe.';errEl.style.display='block';return;}
+  if(existId){const t=therapists.find(x=>x.id===existId);t.nome=nome;t.crp=document.getElementById('tf-crp').value;t.esp=document.getElementById('tf-esp').value;t.nivel=document.getElementById('tf-nivel').value;t.username=user;t.password=pass;}
+  else{therapists.push({id:uid(),nome,crp:document.getElementById('tf-crp').value,esp:document.getElementById('tf-esp').value,nivel:document.getElementById('tf-nivel').value,username:user,password:pass});}
+  saveData();closeOverlay('modal-t-form');renderTherapistAdmin();updateMetrics();showToast('Terapeuta salvo!');
+}
+function removeTherapist(id) { if(!confirm('Remover este terapeuta?')) return; therapists=therapists.filter(x=>x.id!==id); patients.forEach(p=>{if(p.therapistId===id)p.therapistId=null;}); saveData();renderTherapistAdmin();updateMetrics();showToast('Removido.'); }
+
+// ATRIBUIÇÃO
+function openAssign() { const ps=document.getElementById('assign-patient'); ps.innerHTML='<option value="">— Selecione —</option>'; patients.forEach(p=>{const o=document.createElement('option');o.value=p.id;o.textContent=p.nome+(p.therapistId?' (já atribuído)':'');ps.appendChild(o);}); const ts=document.getElementById('assign-therapist'); ts.innerHTML='<option value="">— Selecione —</option>'; therapists.forEach(t=>{const o=document.createElement('option');o.value=t.id;o.textContent=t.nome;ts.appendChild(o);}); document.getElementById('modal-assign').classList.add('open'); }
+function openAssignFor(pid) { openAssign(); setTimeout(()=>{document.getElementById('assign-patient').value=pid;},50); }
+function assignPatient() { const pid=document.getElementById('assign-patient').value, tid=document.getElementById('assign-therapist').value; if(!pid||!tid){showToast('Selecione paciente e terapeuta.');return;} const p=patients.find(x=>x.id===pid); if(p) p.therapistId=tid; saveData();closeOverlay('modal-assign');refreshAdmin();showToast('Paciente atribuído!'); }
+
+// RESET
+function confirmReset() { document.getElementById('modal-reset').classList.add('open'); }
+async function resetAll() { patients=[];appointments=[];therapists=[]; try{if(window.storage)await window.storage.delete(STORAGE_KEY);}catch(e){} closeOverlay('modal-reset');refreshAdmin();showToast('Dados removidos.'); }
+
+// ══ TRIAGEM ══
+function getSintomas(cid) { return Array.from(document.querySelectorAll('#'+cid+' input:checked')).map(c=>c.value); }
+function submitTriagem() {
+  let p;
+  if (currentTipo==='adulto') {
+    const nome=document.getElementById('a-nome').value.trim(), tel=document.getElementById('a-tel').value.trim(), queixa=document.getElementById('a-queixa').value.trim();
+    if(!nome||!tel||!queixa){showToast('Preencha os campos obrigatórios!');return;}
+    p={id:uid(),tipo:'Adulto',nome,nasc:document.getElementById('a-nasc').value,cpf:document.getElementById('a-cpf').value,tel,email:document.getElementById('a-email').value,ecivil:document.getElementById('a-ecivil').value,queixa,terapia:document.getElementById('a-terapia').value,med:document.getElementById('a-med').value,sintomas:getSintomas('a-sintomas'),dias:document.getElementById('a-dias').value,periodo:document.getElementById('a-periodo').value,preferenciaT:document.getElementById('a-preferencia-terapeuta').value,data:new Date().toLocaleDateString('pt-BR'),status:'andamento',sessoes:0,devolutiva:'',obs:'',therapistId:null,devolutivas:{}};
+    ['a-nome','a-nasc','a-cpf','a-tel','a-email','a-queixa'].forEach(id=>document.getElementById(id).value='');
+    document.querySelectorAll('#a-sintomas input').forEach(c=>c.checked=false);
+  } else {
+    const nome=document.getElementById('i-nome').value.trim(), tel=document.getElementById('i-tel').value.trim(), queixa=document.getElementById('i-queixa').value.trim();
+    if(!nome||!tel||!queixa){showToast('Preencha os campos obrigatórios!');return;}
+    p={id:uid(),tipo:'Infantil',nome,nasc:document.getElementById('i-nasc').value,escola:document.getElementById('i-escola').value,reside:document.getElementById('i-reside').value,resp:document.getElementById('i-resp').value,parent:document.getElementById('i-parent').value,tel,email:document.getElementById('i-email').value,queixa,hist:document.getElementById('i-hist').value,sintomas:getSintomas('i-sintomas'),preferenciaT:document.getElementById('i-preferencia-terapeuta').value,data:new Date().toLocaleDateString('pt-BR'),status:'andamento',sessoes:0,devolutiva:'',obs:'',therapistId:null,devolutivas:{}};
+    ['i-nome','i-nasc','i-escola','i-resp','i-tel','i-email','i-queixa','i-hist'].forEach(id=>document.getElementById(id).value='');
+    document.querySelectorAll('#i-sintomas input').forEach(c=>c.checked=false);
+  }
+  patients.push(p); saveData(); showToast('Paciente cadastrado!'); setTimeout(goHome,1600);
+}
+
+// ══ BUSCA ══
+function setStatusFilter(s) { activeStatusFilter=s; ['all','andamento','finalizado','imprevisto','obs'].forEach(x=>{const c=document.getElementById('chip-'+x);if(!c)return;c.className='filter-chip';if(x===s)c.classList.add('active-'+x);}); applyFilters(); }
+function applyFilters() {
+  const q=(document.getElementById('search-q')?.value||'').toLowerCase().trim();
+  const tipo=document.getElementById('filter-tipo')?.value||'';
+  const tId=document.getElementById('filter-terapeuta')?.value||'';
+  const sess=document.getElementById('filter-sessoes')?.value||'';
+  let res=patients.filter(p=>{
+    if(activeStatusFilter!=='all'&&p.status!==activeStatusFilter) return false;
+    if(tipo&&p.tipo!==tipo) return false;
+    if(tId==='none'&&p.therapistId) return false;
+    if(tId&&tId!=='none'&&p.therapistId!==tId) return false;
+    if(sess==='0'&&p.sessoes!==0) return false;
+    if(sess==='1-3'&&(p.sessoes<1||p.sessoes>3)) return false;
+    if(sess==='4-5'&&(p.sessoes<4||p.sessoes>5)) return false;
+    if(sess==='6'&&p.sessoes<6) return false;
+    if(q){const t=therapists.find(x=>x.id===p.therapistId);if(![p.nome,p.queixa,p.tel,p.email,p.tipo,(p.sintomas||[]).join(' '),t?.nome||''].join(' ').toLowerCase().includes(q))return false;}
+    return true;
+  });
+  const c=document.getElementById('search-results-count'), l=document.getElementById('table-count-label');
+  if(c) c.textContent=res.length===patients.length?'Mostrando todos ('+patients.length+')':res.length+' de '+patients.length;
+  if(l) l.textContent=res.length+' Paciente(s)';
+  renderAdminTable(res,q);
+}
+function clearFilters() { document.getElementById('search-q').value=''; document.getElementById('filter-tipo').value=''; document.getElementById('filter-terapeuta').value=''; document.getElementById('filter-sessoes').value=''; setStatusFilter('all'); }
+function populateFilterTerapeuta() { const sel=document.getElementById('filter-terapeuta');if(!sel)return;const cur=sel.value;sel.innerHTML='<option value="">Todos</option><option value="none">Sem terapeuta</option>';therapists.forEach(t=>{const o=document.createElement('option');o.value=t.id;o.textContent=t.nome;sel.appendChild(o);});if(cur)sel.value=cur; }
+function hl(text,q) { if(!q||!text)return text||'—';return String(text).replace(new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi'),'<span class="highlight">$1</span>'); }
+
+// ══ ADMIN ══
+function refreshAdmin() { updateMetrics();populateFilterTerapeuta();applyFilters();renderFichasTable(patients);populateContractSelect('admin');renderNotifPanel('admin'); }
+function updateMetrics() {
+  document.getElementById('m-total').textContent=patients.length;
+  document.getElementById('m-andamento').textContent=patients.filter(p=>p.status==='andamento').length;
+  document.getElementById('m-final').textContent=patients.filter(p=>p.status==='finalizado').length;
+  document.getElementById('m-terapeutas').textContent=therapists.length;
+  document.getElementById('m-agend').textContent=appointments.length;
+}
+function statusBadge(s){return{andamento:`<span class="sb sb-yellow"><span class="sd sd-y"></span>Andamento</span>`,finalizado:`<span class="sb sb-green"><span class="sd sd-g"></span>Finalizado</span>`,imprevisto:`<span class="sb sb-red"><span class="sd sd-r"></span>Imprevisto</span>`,obs:`<span class="sb sb-obs"><span class="sd sd-o"></span>Observação</span>`}[s]||'';}
+function renderAdminTable(list,q='') {
+  const tb=document.getElementById('admin-table-body');if(!tb)return;
+  if(!list.length){tb.innerHTML='<tr class="empty-row"><td colspan="5">Nenhum paciente encontrado.</td></tr>';return;}
+  tb.innerHTML=list.map(p=>{const t=therapists.find(x=>x.id===p.therapistId);
+    const bar=`<div style="display:flex;align-items:center;gap:5px"><span style="font-size:.76rem;font-weight:600;color:var(--text)">${p.sessoes}/6</span><div style="flex:1;height:3px;background:var(--bg4);border-radius:50px;min-width:32px"><div style="width:${Math.round(p.sessoes/6*100)}%;height:100%;border-radius:50px;background:var(--grad)"></div></div></div>`;
+    return `<tr><td><strong>${hl(p.nome,q)}</strong><br><span style="font-size:.7rem;color:var(--text3)">${p.tipo}</span></td><td>${t?hl(t.nome,q):'<span style="color:var(--text3);font-size:.76rem">Não atribuído</span>'}</td><td style="min-width:80px">${bar}</td><td>${statusBadge(p.status)}</td><td><button class="link-btn" onclick="openFicha('${p.id}')">Ficha</button> <button class="link-btn" style="color:var(--teal)" onclick="openAssignFor('${p.id}')">Atribuir</button></td></tr>`;
+  }).join('');
+}
+function renderFichasTable(list){const tb=document.getElementById('fichas-table-body');if(!tb)return;if(!list.length){tb.innerHTML='<tr class="empty-row"><td colspan="6">Nenhuma ficha.</td></tr>';return;}tb.innerHTML=list.map(p=>{const t=therapists.find(x=>x.id===p.therapistId);return `<tr><td><strong>${p.nome}</strong></td><td>${p.tipo}</td><td>${p.data}</td><td>${(p.sintomas||[]).slice(0,3).join(', ')||'—'}</td><td>${t?t.nome:'—'}</td><td><button class="link-btn" onclick="openFicha('${p.id}')">Ver</button></td></tr>`;}).join('');}
+function filterFichasTable(v){renderFichasTable(patients.filter(p=>p.nome.toLowerCase().includes(v.toLowerCase())));}
+function openFicha(id){const p=patients.find(x=>x.id===id);if(!p)return;const t=therapists.find(x=>x.id===p.therapistId);document.getElementById('mf-name').textContent=p.nome;  const rows=[['Tipo',p.tipo],['Entrada',p.data],['Telefone',p.tel],['E-mail',p.email||'—'],p.tipo==='Adulto'?['Estado civil',p.ecivil]:['Responsável',(p.resp||'—')+' ('+p.parent+')'],['Queixa',p.queixa],['Sintomas',(p.sintomas||[]).join(', ')||'—'],p.tipo==='Adulto'?['Terapia anterior',p.terapia]:['Escola',p.escola||'—'],['Pref. Terapeuta',p.preferenciaT||'Sem preferência'],['Terapeuta',t?t.nome:'Não atribuído'],['Status',p.status],['Sessões',p.sessoes+'/6'],['Agendamentos',appointments.filter(a=>a.patientId===p.id).length+' sessão(ões)']];document.getElementById('mf-body').innerHTML=rows.map(([k,v])=>`<div class="detail-row"><span class="dk">${k}</span><span class="dv">${v}</span></div>`).join('');document.getElementById('modal-ficha').classList.add('open');}
+
+// ══ CONTRATO ══
+function populateContractSelect(prefix){const sel=document.getElementById(prefix+'-contract-select');if(!sel)return;const cur=sel.value;sel.innerHTML='<option value="">— Selecione —</option>';(prefix==='t'&&currentTherapist?patients.filter(p=>p.therapistId===currentTherapist.id):patients).forEach(p=>{const o=document.createElement('option');o.value=p.id;o.textContent=p.nome+' ('+p.tipo+')';sel.appendChild(o);});if(cur)sel.value=cur;}
+function fillContract(prefix,pid){const banner=document.getElementById(prefix+'-auto-banner'),cpi=document.getElementById(prefix+'-cpi');if(!pid){banner.classList.remove('visible');if(cpi)cpi.style.display='none';clearContractFields(prefix);return;}const p=patients.find(x=>x.id===pid);if(!p)return;const pfx=prefix==='admin'?'ac':'tc';setField(pfx+'-nome',p.nome,true);setField(pfx+'-tel',p.tel,true);setField(pfx+'-email',p.email||'',true);if(prefix==='admin'){const t=therapists.find(x=>x.id===p.therapistId);setField('ac-terapeuta',t?t.nome:'',false);}const sp=document.getElementById(pfx+'-sign-paciente');if(sp)sp.textContent=p.tipo==='Infantil'&&p.resp?'Responsável: '+p.resp:p.nome;const rows=p.tipo==='Adulto'?[['Nome',p.nome],['Tipo','Adulto'],['Nasc.',p.nasc||'—'],['Tel.',p.tel],['E-mail',p.email||'—'],['Est. Civil',p.ecivil],['Queixa',p.queixa],['Sintomas',(p.sintomas||[]).join(', ')||'—'],['Terapia',p.terapia],['Medicação',p.med]]:[['Nome',p.nome],['Tipo','Infantil'],['Nasc.',p.nasc||'—'],['Responsável',p.resp||'—'],['Parentesco',p.parent||'—'],['Tel.',p.tel],['E-mail',p.email||'—'],['Escola',p.escola||'—'],['Queixa',p.queixa],['Sintomas',(p.sintomas||[]).join(', ')||'—']];const g=document.getElementById(prefix+'-cpi-grid');if(g)g.innerHTML=rows.map(([k,v])=>`<div class="cpi-row"><span class="cpi-key">${k}</span><span class="cpi-val">${v}</span></div>`).join('');if(cpi)cpi.style.display='block';document.getElementById(prefix+'-auto-text').textContent='Dados de '+p.nome+' preenchidos da triagem de '+p.data+'.';banner.classList.add('visible');showToast('Contrato preenchido!');}
+function setField(id,val,hi){const el=document.getElementById(id);if(!el)return;el.value=val;hi&&val?el.classList.add('auto-filled'):el.classList.remove('auto-filled');}
+function clearContractFields(prefix){const pfx=prefix==='admin'?'ac':'tc';['nome','tel','email','data','valor'].forEach(f=>{const el=document.getElementById(pfx+'-'+f);if(el&&!el.readOnly){el.value='';el.classList.remove('auto-filled');}});}
+function clearContract(prefix){clearContractFields(prefix);const b=document.getElementById(prefix+'-auto-banner');if(b)b.classList.remove('visible');const c=document.getElementById(prefix+'-cpi');if(c)c.style.display='none';const s=document.getElementById(prefix+'-contract-select');if(s)s.value='';showToast('Limpo.');}
+
+// ══ TERAPEUTA ══
+function refreshTherapist() { renderTherapistCards(); renderObsList(); populateContractSelect('t'); updateTherapistHeader(); renderNotifPanel('t'); initPerfil(); }
+function myPatients(){return currentTherapist?patients.filter(p=>p.therapistId===currentTherapist.id):[];}
+function renderTherapistCards(){
+  const c=document.getElementById('therapist-cards-container');if(!c)return;
+  const mine=myPatients();
+  if(!mine.length){c.innerHTML=`<div class="empty-state"><div class="es-icon">◎</div><p>Nenhum paciente atribuído ainda.<br>O administrador pode atribuí-los.</p></div>`;return;}
+  c.innerHTML=mine.map(p=>{
+    const pct=Math.round((p.sessoes/6)*100);
+    const ic={andamento:'var(--yellow)',finalizado:'var(--teal)',imprevisto:'var(--red)',obs:'var(--obs)'}[p.status];
+    const bc={andamento:'ay',finalizado:'ag',imprevisto:'ar',obs:'ao'};
+    const btns=['finalizado','andamento','imprevisto','obs'].map(s=>`<button class="sbt${p.status===s?' '+bc[s]:''}" onclick="setStatus('${p.id}','${s}')">${{andamento:'●',finalizado:'✓',imprevisto:'!',obs:'○'}[s]}</button>`).join('');
+    const next=appointments.filter(a=>a.patientId===p.id).sort((a,b)=>a.date.localeCompare(b.date)||a.time.localeCompare(b.time))[0];
+    return `<div class="patient-card"><div class="pch"><div class="p-avatar">${initials(p.nome)}</div><div class="p-info"><h4>${p.nome}</h4><p>${p.tipo} · ${(p.sintomas||[])[0]||p.queixa.slice(0,22)}</p></div><div class="p-ind" style="background:${ic}"></div></div>
+    <div class="pcb">
+      <div class="sess-row"><span class="sess-lbl">Sessões</span><span class="sess-cnt">${p.sessoes}/6</span></div>
+      <div class="pbar"><div class="pfill" style="width:${pct}%${p.sessoes>=6?';background:var(--teal)':''}"></div></div>
+      <div class="sess-controls"><button class="sess-btn" onclick="changeSessoes('${p.id}',-1)" ${p.sessoes<=0?'disabled':''}>−</button><div class="sess-dots">${[1,2,3,4,5,6].map(i=>`<div class="sess-dot${i<=p.sessoes?' done':''}${i===p.sessoes&&p.sessoes<6?' current':''}"></div>`).join('')}</div><button class="sess-btn" onclick="changeSessoes('${p.id}',1)" ${p.sessoes>=6?'disabled':''}>+</button></div>
+      ${p.sessoes>=6?`<div style="font-size:.7rem;color:var(--teal);font-weight:600;margin-bottom:9px;text-align:center">Contrato concluído</div>`:''}
+      ${next?`<div style="font-size:.7rem;color:var(--blue);margin-bottom:9px">Próxima: ${fmtDate(next.date)} às ${next.time}</div>`:'<div style="font-size:.7rem;color:var(--text3);margin-bottom:9px">Sem sessão agendada</div>'}
+      <div class="dev-lbl">Devolutiva <button class="dev-link" onclick="openDevHistory('${p.id}')">Histórico →</button></div>
+      <textarea class="dev-txt" placeholder="Devolutiva da sessão ${p.sessoes||1}..." onchange="updateDev('${p.id}',this.value,${p.sessoes||1})">${p.devolutiva}</textarea>
+    </div><div class="pcf">${btns}</div></div>`;
+  }).join('');
+}
+function changeSessoes(id,delta){const p=patients.find(x=>x.id===id);if(!p)return;const n=Math.min(6,Math.max(0,p.sessoes+delta));if(n===p.sessoes)return;p.sessoes=n;if(n>=6&&p.status==='andamento')p.status='finalizado';saveData();renderTherapistCards();updateMetrics();showToast(delta>0?`Sessão ${n}/6 registrada!`:`Sessão removida (${n}/6)`);}
+function setStatus(id,s){const p=patients.find(x=>x.id===id);if(p){p.status=s;saveData();renderTherapistCards();updateMetrics();showToast('Status atualizado!');}}
+function updateDev(id,v,n){const p=patients.find(x=>x.id===id);if(!p)return;p.devolutiva=v;if(!p.devolutivas)p.devolutivas={};if(n)p.devolutivas[n]=v;saveData();}
+function renderObsList(){const c=document.getElementById('obs-list');if(!c)return;const mine=myPatients();if(!mine.length){c.innerHTML='<p style="color:var(--text3);font-size:.82rem">Nenhum paciente atribuído.</p>';return;}c.innerHTML=mine.map(p=>`<div><div style="font-weight:600;font-size:.86rem;margin-bottom:6px;color:var(--text)">${p.nome} <span style="font-weight:400;color:var(--text2);font-size:.74rem">— ${p.tipo}</span></div><textarea style="width:100%;background:var(--bg3);border:1px solid var(--border2);color:var(--text);border-radius:8px;padding:9px 11px;font-family:Inter,sans-serif;font-size:.8rem;resize:vertical;min-height:64px;outline:none;transition:border-color .2s" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border2)'" onchange="updateObs('${p.id}',this.value)">${p.obs}</textarea></div>`).join('');}
+function updateObs(id,v){const p=patients.find(x=>x.id===id);if(p){p.obs=v;saveData();}}
+
+// ══ DEVOLUTIVAS ══
+function openDevHistory(pid){const p=patients.find(x=>x.id===pid);if(!p)return;document.getElementById('dev-history-title').textContent='Devolutivas — '+p.nome;renderDevHistoryList(p);document.getElementById('modal-dev-history').classList.add('open');}
+function renderDevHistoryList(p){const list=document.getElementById('dev-history-list');if(!p.devolutivas)p.devolutivas={};if(p.devolutiva&&p.sessoes>0&&!p.devolutivas[p.sessoes])p.devolutivas[p.sessoes]=p.devolutiva;const pa=appointments.filter(a=>a.patientId===p.id).sort((a,b)=>a.date.localeCompare(b.date));list.innerHTML=Array.from({length:6},(_,i)=>{const n=i+1,done=n<=p.sessoes,txt=p.devolutivas[n]||'',apt=pa[n-1];return `<div class="dev-history-item"><div class="dev-history-header" onclick="toggleDev(${n})"><div class="dev-sessao-num ${done?'':'empty'}">${n}</div><div class="dev-sessao-info"><h5>Sessão ${n} ${done?'✓':'— pendente'}</h5><p>${apt?fmtDate(apt.date)+' às '+apt.time:(done?'Data não registrada':'Não realizada')}${txt?' · Registrada':''}</p></div><span class="dev-sessao-arrow" id="dev-arrow-${n}">›</span></div><div class="dev-history-body" id="dev-body-${n}"><textarea class="dev-textarea" id="dev-text-${n}" ${done?'':'disabled'} placeholder="${done?'Devolutiva da sessão '+n+'...':'Sessão não realizada.'}" oninput="updateDevCount(${n})">${txt}</textarea><div class="dev-save-row"><span class="dev-char-count" id="dev-count-${n}">${txt.length} caracteres</span>${done?`<button class="dev-save-btn" onclick="saveDev(${n},'${p.id}')">Salvar</button>`:''}</div></div></div>`;}).join('');}
+function toggleDev(n){const b=document.getElementById('dev-body-'+n),a=document.getElementById('dev-arrow-'+n);const o=b.classList.contains('open');document.querySelectorAll('.dev-history-body').forEach(x=>x.classList.remove('open'));document.querySelectorAll('.dev-sessao-arrow').forEach(x=>x.classList.remove('open'));if(!o){b.classList.add('open');a.classList.add('open');}}
+function updateDevCount(n){const t=document.getElementById('dev-text-'+n),c=document.getElementById('dev-count-'+n);if(t&&c)c.textContent=t.value.length+' caracteres';}
+function saveDev(n,pid){const p=patients.find(x=>x.id===pid);if(!p)return;if(!p.devolutivas)p.devolutivas={};const txt=document.getElementById('dev-text-'+n);if(!txt)return;p.devolutivas[n]=txt.value;if(n===p.sessoes)p.devolutiva=txt.value;saveData();renderDevHistoryList(p);setTimeout(()=>toggleDev(n),50);showToast('Devolutiva da sessão '+n+' salva!');}
+
+// ══ RELATÓRIO ══
+function renderRelatorioList(scope){const list=scope==='t'&&currentTherapist?patients.filter(p=>p.therapistId===currentTherapist.id):patients;const el=document.getElementById('rel-list-'+scope);if(!el)return;if(!list.length){el.innerHTML='<div style="padding:18px;text-align:center;color:var(--text3);font-size:.8rem">Nenhum paciente.</div>';return;}el.innerHTML=list.map(p=>{const sc={andamento:'var(--yellow)',finalizado:'var(--teal)',imprevisto:'var(--red)',obs:'var(--obs)'}[p.status];return `<div class="rel-patient-item" id="rpi-${scope}-${p.id}" onclick="renderRelatorio('${scope}','${p.id}')"><div class="rp-avatar">${initials(p.nome)}</div><div class="rp-info"><h5>${p.nome}</h5><p>${p.tipo} · <span style="color:${sc};font-weight:600">${{andamento:'Ativo',finalizado:'Finalizado',imprevisto:'Imprevisto',obs:'Observação'}[p.status]}</span></p></div><div class="rp-sessoes">${p.sessoes}/6</div></div>`;}).join('');}
+function renderRelatorio(scope,pid){document.querySelectorAll(`[id^="rpi-${scope}-"]`).forEach(el=>el.classList.remove('active'));const item=document.getElementById(`rpi-${scope}-${pid}`);if(item)item.classList.add('active');const p=patients.find(x=>x.id===pid);if(!p)return;const t=therapists.find(x=>x.id===p.therapistId),pa=appointments.filter(a=>a.patientId===pid).sort((a,b)=>a.date.localeCompare(b.date)),pct=Math.round((p.sessoes/6)*100),sl={andamento:'Em Andamento',finalizado:'Finalizado',imprevisto:'Imprevisto',obs:'Observação'}[p.status]||p.status,sc={andamento:'var(--yellow)',finalizado:'var(--teal)',imprevisto:'var(--red)',obs:'var(--obs)'}[p.status];
+  const tlHTML=p.sessoes?Array.from({length:p.sessoes},(_,i)=>{const n=i+1,apt=pa[n-1],dv=(p.devolutivas&&p.devolutivas[n])||(n===p.sessoes?p.devolutiva:'');return `<div class="rel-tl-item"><div class="rel-tl-dot">${n}</div><div class="rel-tl-body"><div class="rel-tl-header"><span class="rel-tl-title">Sessão ${n}</span>${apt?`<span class="rel-tl-date">${fmtDate(apt.date)} às ${apt.time}</span>`:'<span class="rel-tl-date" style="color:var(--text3)">Data não registrada</span>'}</div>${dv?`<div class="rel-tl-text">${dv}</div>`:'<div style="font-size:.74rem;color:var(--text3);font-style:italic">Sem devolutiva.</div>'}</div></div>`;}).join(''):'<p style="color:var(--text3);font-size:.78rem;font-style:italic">Nenhuma sessão.</p>';
+  const futHTML=pa.slice(p.sessoes).map(a=>`<div class="rel-tl-item"><div class="rel-tl-dot empty">→</div><div class="rel-tl-body"><div class="rel-tl-header"><span class="rel-tl-title">Agendada</span><span class="rel-tl-date">${fmtDate(a.date)} às ${a.time} · ${a.mode}</span></div></div></div>`).join('');
+  const content=document.getElementById('rel-content-'+scope);if(!content)return;
+  content.innerHTML=`<div class="rel-card"><div class="rel-card-header"><div style="display:flex;align-items:center;gap:10px"><div style="width:36px;height:36px;border-radius:9px;background:var(--grad);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:.8rem">${initials(p.nome)}</div><div><h4 style="font-size:.96rem">${p.nome}</h4><p style="font-size:.7rem;color:var(--text2);margin-top:1px">${p.tipo} · Entrada: ${p.data}${t?' · '+t.nome:''}</p></div></div><button class="print-btn" onclick="window.print()">Imprimir</button></div>
+  <div class="rel-card-body"><div class="rel-hero"><div class="rel-stat"><div class="rel-stat-val">${p.sessoes}</div><div class="rel-stat-lbl">Feitas</div></div><div class="rel-stat"><div class="rel-stat-val">${6-p.sessoes}</div><div class="rel-stat-lbl">Restam</div></div><div class="rel-stat"><div class="rel-stat-val">${pa.length}</div><div class="rel-stat-lbl">Agend.</div></div><div class="rel-stat"><div class="rel-stat-val" style="font-size:.9rem;color:${sc}">${sl}</div><div class="rel-stat-lbl">Status</div></div></div>
+  <div class="rel-progress-bar"><div class="rel-progress-fill" style="width:${pct}%${p.sessoes>=6?';background:var(--teal)':''}"></div></div><div class="rel-progress-label"><span>Progresso</span><span><strong style="color:var(--text)">${pct}%</strong></span></div></div></div>
+  <div class="rel-card"><div class="rel-card-header"><h4>Dados da Triagem</h4></div><div class="rel-card-body"><div class="rel-info-grid"><div class="rel-info-row"><span class="rel-info-key">Queixa</span><span class="rel-info-val">${p.queixa}</span></div><div class="rel-info-row"><span class="rel-info-key">Sintomas</span><span class="rel-info-val">${(p.sintomas||[]).join(', ')||'—'}</span></div>${p.tipo==='Adulto'?`<div class="rel-info-row"><span class="rel-info-key">Terapia ant.</span><span class="rel-info-val">${p.terapia||'—'}</span></div><div class="rel-info-row"><span class="rel-info-key">Medicação</span><span class="rel-info-val">${p.med||'—'}</span></div>`:`<div class="rel-info-row"><span class="rel-info-key">Responsável</span><span class="rel-info-val">${p.resp||'—'}</span></div><div class="rel-info-row"><span class="rel-info-key">Escola</span><span class="rel-info-val">${p.escola||'—'}</span></div>`}<div class="rel-info-row"><span class="rel-info-key">Contato</span><span class="rel-info-val">${p.tel}</span></div><div class="rel-info-row"><span class="rel-info-key">Disponib.</span><span class="rel-info-val">${p.dias||'—'}</span></div></div>${p.obs?`<div style="margin-top:10px"><div style="font-size:.6rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">Observações</div><div style="background:var(--bg3);border-radius:7px;padding:10px;font-size:.78rem;line-height:1.5;border-left:2px solid var(--teal);color:var(--text2)">${p.obs}</div></div>`:''}</div></div>
+  <div class="rel-card"><div class="rel-card-header"><h4>Histórico de Sessões</h4><span style="font-size:.72rem;color:var(--text2)">${p.sessoes}/6 realizadas</span></div><div class="rel-card-body"><div class="rel-timeline">${tlHTML}${futHTML}</div></div></div>
+  ${p.devolutiva?`<div class="rel-card"><div class="rel-card-header"><h4>Devolutiva Atual</h4></div><div class="rel-card-body"><div style="font-size:.8rem;line-height:1.7;color:var(--text2)">${p.devolutiva}</div></div></div>`:''}`;}
+
+// ══ NOTIFICAÇÕES ══
+function buildNotifications(scope){const mine=scope==='t'&&currentTherapist?patients.filter(p=>p.therapistId===currentTherapist.id):patients;const notifs=[];const now=new Date();now.setHours(0,0,0,0);mine.forEach(p=>{if(p.status==='obs')notifs.push({icon:'⚠',cls:'ni-red',title:'Sem retorno: '+p.nome,desc:'Em observação.'});if(p.status==='imprevisto')notifs.push({icon:'!',cls:'ni-red',title:'Imprevisto: '+p.nome,desc:'Processo pausado.'});const na=appointments.filter(a=>a.patientId===p.id).sort((a,b)=>a.date.localeCompare(b.date))[0];if(na){const diff=Math.round((new Date(na.date+'T00:00:00')-now)/86400000);if(diff>=0&&diff<=2)notifs.push({icon:'◻',cls:'ni-blue',title:'Sessão '+(diff===0?'hoje':diff===1?'amanhã':'em 2 dias')+': '+p.nome,desc:'Às '+na.time+' — '+na.mode});}if(p.sessoes===5&&p.status!=='finalizado')notifs.push({icon:'→',cls:'ni-yellow',title:'Última sessão: '+p.nome,desc:'Avalie renovação.'});if(p.sessoes>=6&&p.status!=='finalizado')notifs.push({icon:'✓',cls:'ni-green',title:'Concluído: '+p.nome,desc:'Marque como finalizado.'});if(scope==='admin'&&!p.therapistId)notifs.push({icon:'◎',cls:'ni-yellow',title:'Sem terapeuta: '+p.nome,desc:'Paciente sem terapeuta.'});});return notifs;}
+function renderNotifPanel(scope){const notifs=buildNotifications(scope),le=document.getElementById('notif-list-'+scope),de=document.getElementById('notif-dot-'+scope);if(!le||!de)return;if(!notifs.length){le.innerHTML='<div class="notif-empty">Tudo em dia.</div>';de.style.display='none';return;}le.innerHTML=notifs.map(n=>`<div class="notif-item"><div class="notif-icon ${n.cls}">${n.icon}</div><div class="notif-content"><h5>${n.title}</h5><p>${n.desc}</p></div></div>`).join('');de.textContent=notifs.length>9?'9+':notifs.length;de.style.display='flex';}
+function toggleNotifPanel(scope){const p=document.getElementById('notif-panel-'+scope);const open=p.classList.contains('open');document.querySelectorAll('.notif-panel').forEach(x=>x.classList.remove('open'));if(!open){p.classList.add('open');renderNotifPanel(scope);}}
+function closeNotifPanel(scope){document.getElementById('notif-panel-'+scope).classList.remove('open');}
+document.addEventListener('click',e=>{if(!e.target.closest('.notif-panel')&&!e.target.closest('.notif-btn'))document.querySelectorAll('.notif-panel').forEach(p=>p.classList.remove('open'));});
+
+// ══ EXPORTAR ══
+function exportCSV(){if(!patients.length){showToast('Nenhum paciente para exportar.');return;}const headers=['Nome','Tipo','Data Entrada','Telefone','E-mail','Queixa','Sintomas','Terapeuta','Sessões','Status'];const rows=patients.map(p=>{const t=therapists.find(x=>x.id===p.therapistId);const sl={andamento:'Em Andamento',finalizado:'Finalizado',imprevisto:'Imprevisto',obs:'Observação'}[p.status]||p.status;return[p.nome,p.tipo,p.data,p.tel,p.email||'','"'+p.queixa.replace(/"/g,'""')+'"','"'+(p.sintomas||[]).join(', ')+'"',t?t.nome:'Não atribuído',p.sessoes+'/6',sl];});const csv=[headers,...rows].map(r=>r.join(';')).join('\n');const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='pacientes_transformar_'+new Date().toLocaleDateString('pt-BR').replace(/\//g,'-')+'.csv';a.click();URL.revokeObjectURL(url);showToast('CSV exportado!');}
+function exportContractPDF(scope){const pfx=scope==='admin'?'ac':'tc';const nome=document.getElementById(pfx+'-nome')?.value||'—';const terapeuta=document.getElementById(pfx+'-terapeuta')?.value||'—';const data=document.getElementById(pfx+'-data')?.value||'';const valor=document.getElementById(pfx+'-valor')?.value||'—';const tel=document.getElementById(pfx+'-tel')?.value||'—';const email=document.getElementById(pfx+'-email')?.value||'—';const sp=document.getElementById(pfx+'-sign-paciente')?.textContent||'Paciente / Responsável';const st=scope==='admin'?'Assinatura do(a) Terapeuta':(document.getElementById('tc-sign-terapeuta')?.textContent||'Assinatura do(a) Terapeuta');const df=data?data.split('-').reverse().join('/'):'___/___/______';const html=`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Georgia,serif;color:#1a1a2e;background:white;padding:40px 60px;font-size:13px;line-height:1.7}.header{text-align:center;margin-bottom:32px;padding-bottom:20px;border-bottom:2px solid #1a1a2e}.logo-line{width:40px;height:3px;background:linear-gradient(90deg,#4f8ef7,#2dd4aa);margin:0 auto 14px;border-radius:2px}h1{font-size:18px;font-weight:700;margin-bottom:4px}.sub{font-size:11px;color:#555;margin-bottom:2px}.sub2{font-size:10px;color:#4f8ef7;font-style:italic}.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:22px 0;padding:16px;background:#f8fafc;border:1px solid #e0e8f0;border-radius:6px}.field label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#888;display:block;margin-bottom:3px}.field span{font-size:12px;font-weight:600;color:#1a1a2e;border-bottom:1px solid #cdd5e0;display:block;padding-bottom:4px}h3{font-size:12px;font-weight:700;color:#1a1a2e;margin:18px 0 5px;padding-left:8px;border-left:3px solid #4f8ef7}p{font-size:12px;color:#444;margin-left:8px}.sign-area{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:40px}.sign-block{text-align:center}.sign-line{border-bottom:1.5px solid #1a1a2e;margin-bottom:8px;height:44px}.sign-label{font-size:11px;color:#666}.footer{margin-top:32px;text-align:center;font-size:9px;color:#aaa;border-top:1px solid #e0e8f0;padding-top:12px}</style></head><body><div class="header"><div class="logo-line"></div><h1>Contrato de Prestação de Serviços Terapêuticos</h1><p class="sub">Projeto Social Transformar</p><p class="sub2">Abordagem Cristã</p></div><div class="fields"><div class="field"><label>Paciente</label><span>${nome}</span></div><div class="field"><label>Terapeuta</label><span>${terapeuta}</span></div><div class="field"><label>Data de Início</label><span>${df}</span></div><div class="field"><label>Valor por Sessão</label><span>R$ ${valor}</span></div><div class="field"><label>Telefone</label><span>${tel}</span></div><div class="field"><label>E-mail</label><span>${email}</span></div></div><h3>1. Objeto</h3><p>Prestação de serviços de psicoterapia pelo período de <strong>6 sessões</strong> individuais de 50 minutos cada.</p><h3>2. Modalidade</h3><p>Presencial ou online, conforme acordado entre as partes.</p><h3>3. Cancelamento</h3><p>Comunicar com no mínimo 24 horas de antecedência. Ausências sem aviso serão cobradas integralmente.</p><h3>4. Sigilo</h3><p>Sigilo absoluto conforme o Código de Ética Profissional do(a) Psicólogo(a).</p><h3>5. Renovação</h3><p>Ao término das 6 sessões, as partes poderão avaliar a continuidade mediante novo contrato.</p><div class="sign-area"><div class="sign-block"><div class="sign-line"></div><div class="sign-label">${sp}</div></div><div class="sign-block"><div class="sign-line"></div><div class="sign-label">${st}</div></div></div><div class="footer">Projeto Social Transformar · Abordagem Cristã · ${new Date().toLocaleDateString('pt-BR')}</div></body></html>`;const win=window.open('','_blank');if(!win){showToast('Permita pop-ups para gerar o PDF.');return;}win.document.write(html);win.document.close();win.onload=()=>win.print();showToast('Abrindo para impressão/PDF...');}
+
+// ══ UTILS ══
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400);}
+
+function toggleDotsMenu() {
+  const menu = document.getElementById('dots-menu');
+  const btn = document.getElementById('dots-btn');
+  const isOpen = menu.style.display === 'block';
+  menu.style.display = isOpen ? 'none' : 'block';
+  btn.style.color = isOpen ? 'rgba(255,255,255,.35)' : 'white';
+  btn.style.background = isOpen ? 'rgba(255,255,255,.06)' : 'rgba(255,255,255,.12)';
+}
+
+function closeDotsMenu() {
+  const menu = document.getElementById('dots-menu');
+  const btn = document.getElementById('dots-btn');
+  menu.style.display = 'none';
+  btn.style.color = 'rgba(255,255,255,.35)';
+  btn.style.background = 'rgba(255,255,255,.06)';
+}
+
+// fecha ao clicar fora
+document.addEventListener('click', e => {
+  if (!e.target.closest('#dots-btn') && !e.target.closest('#dots-menu')) {
+    closeDotsMenu();
+  }
+});
+(async () => {
+  await loadData();
+  // calendários iniciais sem selecionar dia ainda
+  calState.admin.selected = dateKey(today.getFullYear(), today.getMonth(), today.getDate());
+  calState.t.selected = dateKey(today.getFullYear(), today.getMonth(), today.getDate());
+})();
+</script>
+</body>
+</html>
